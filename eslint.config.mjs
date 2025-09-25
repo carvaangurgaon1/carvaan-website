@@ -1,13 +1,13 @@
 // eslint.config.mjs
-import next from "eslint-config-next";
 import js from "@eslint/js";
+import next from "eslint-config-next";
 
 export default [
   js.configs.recommended,
   ...next(),
   {
     rules: {
-      // You can add custom rules here
+      // add your custom rules here if needed
     },
   },
 ];
