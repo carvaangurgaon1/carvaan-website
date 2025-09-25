@@ -1,10 +1,11 @@
-import "./globals.css";  
+import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export const metadata = {
   title: "Carvaan - Travel Together, Earn Together 🚐✨",
-  description: "India’s fastest-growing travel community.",
+  description:
+    "India’s fastest-growing travel community. Book trips, earn Carvaan Coins, and join 1000+ travelers.",
 };
 
 export default function RootLayout({ children }) {
@@ -12,9 +13,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Header />
-        <main style={{ minHeight: "80vh", padding: "2rem" }}>
-          {children}
-        </main>
+        <main>{children}</main>
         <Footer />
       </body>
     </html>
