@@ -1,13 +1,8 @@
-// eslint.config.mjs
-import js from "@eslint/js";
-import next from "eslint-config-next";
+import nextPlugin from 'eslint-config-next';
 
 export default [
-  js.configs.recommended,
-  ...next(),
   {
-    rules: {
-      // add your custom rules here if needed
-    },
+    ignores: ['node_modules', '.next', 'dist'],
   },
+  ...nextPlugin(),
 ];
