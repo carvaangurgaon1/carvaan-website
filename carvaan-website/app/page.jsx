@@ -1,8 +1,8 @@
-export default function HomePage() {
+export default function Home() {
   return (
     <div>
       <h1>Welcome to Carvaan 🚐✨</h1>
-      <p>Your travel community starts here.</p>
+      <p>This is your homepage.</p>
     </div>
   );
 }
