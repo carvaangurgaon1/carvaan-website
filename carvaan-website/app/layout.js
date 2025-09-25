@@ -1,10 +1,10 @@
-import "./globals.css";  // Global styles
+import "./globals.css";  
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export const metadata = {
   title: "Carvaan - Travel Together, Earn Together 🚐✨",
-  description: "India’s fastest-growing travel community. Book trips, earn Carvaan Coins, and join 1000+ travelers.",
+  description: "India’s fastest-growing travel community.",
 };
 
 export default function RootLayout({ children }) {
