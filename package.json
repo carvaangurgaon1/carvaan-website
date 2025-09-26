@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-  "lint": "echo 'Skipping lint check...'"
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "eslint ."
 },
   "dependencies": {
     "@next/font": "13.1.6",
