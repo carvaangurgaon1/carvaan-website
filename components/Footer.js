@@ -17,7 +17,7 @@ export default function Footer() {
           <h2 className="text-lg font-semibold text-white mb-3">Quick Links</h2>
           <ul className="space-y-2 text-sm">
             <li><a href="/about" className="hover:text-white">About Us</a></li>
-            <li><a href="/marketplace" className="hover:text-white">Trips</a></li>
+            <li><a href="/trips" className="hover:text-white">Trips</a></li>
             <li><a href="/community" className="hover:text-white">Community</a></li>
             <li><a href="/coins" className="hover:text-white">Carvaan Coins</a></li>
             <li><a href="/faq" className="hover:text-white">FAQ</a></li>
