@@ -10,7 +10,7 @@ export default function Header() {
         <ul className="flex space-x-6 text-gray-700 font-medium">
           <li><a href="/" className="hover:text-pink-600">Home</a></li>
           <li><a href="/about" className="hover:text-pink-600">About Us</a></li>
-          <li><a href="/marketplace" className="hover:text-pink-600">Trips</a></li>
+          <li><a href="/trips" className="hover:text-pink-600">Trips</a></li>
           <li><a href="/community" className="hover:text-pink-600">Community</a></li>
           <li><a href="/coins" className="hover:text-pink-600">Coins</a></li>
           <li><a href="/faq" className="hover:text-pink-600">FAQ</a></li>
