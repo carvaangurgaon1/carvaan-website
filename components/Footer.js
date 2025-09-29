@@ -1,4 +1,8 @@
 // components/Footer.js
+"use client";
+
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300 py-10">
@@ -8,7 +12,8 @@ export default function Footer() {
         <div>
           <h2 className="text-xl font-bold text-white mb-4">Carvaan</h2>
           <p className="text-sm">
-            Simplifying group travel with community, rewards, and unforgettable experiences.
+            Simplifying group travel with community, rewards, and unforgettable
+            experiences.
           </p>
         </div>
 
@@ -16,21 +21,52 @@ export default function Footer() {
         <div>
           <h2 className="text-lg font-semibold text-white mb-3">Quick Links</h2>
           <ul className="space-y-2 text-sm">
-            <li><a href="/about" className="hover:text-white">About Us</a></li>
-            <li><a href="/trips" className="hover:text-white">Trips</a></li>
-            <li><a href="/community" className="hover:text-white">Community</a></li>
-            <li><a href="/coins" className="hover:text-white">Carvaan Coins</a></li>
-            <li><a href="/faq" className="hover:text-white">FAQ</a></li>
+            <li>
+              <Link href="/about" className="hover:text-white">
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link href="/trips" className="hover:text-white">
+                Trips
+              </Link>
+            </li>
+            <li>
+              <Link href="/community" className="hover:text-white">
+                Community
+              </Link>
+            </li>
+            <li>
+              <Link href="/coins" className="hover:text-white">
+                Carvaan Coins
+              </Link>
+            </li>
+            <li>
+              <Link href="/faq" className="hover:text-white">
+                FAQ
+              </Link>
+            </li>
+            <li>
+              <Link href="/auth" className="hover:text-white">
+                Login / Sign Up
+              </Link>
+            </li>
           </ul>
         </div>
 
         {/* Column 3 */}
         <div>
-          <h2 className="text-lg font-semibold text-white mb-3">Get in Touch</h2>
+          <h2 className="text-lg font-semibold text-white mb-3">
+            Get in Touch
+          </h2>
           <ul className="space-y-2 text-sm">
             <li>Email: support@carvaan.co</li>
             <li>Phone: +91 98765 43210</li>
-            <li><a href="/contact" className="hover:text-white">Contact Form</a></li>
+            <li>
+              <Link href="/contact" className="hover:text-white">
+                Contact Form
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
