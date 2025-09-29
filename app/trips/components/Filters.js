@@ -1,18 +1,14 @@
 // app/trips/components/Filters.js
 export default function Filters() {
   return (
-    <section className="py-12 bg-gray-50">
-      <div className="container mx-auto flex flex-col md:flex-row gap-10">
-        {/* Sidebar Filters */}
-        <aside className="w-full md:w-1/4 bg-white p-6 shadow rounded-lg">
-          <h3 className="text-xl font-bold mb-4">Filters</h3>
-          <div className="space-y-4">
-            <select className="w-full border p-2 rounded">
-              <option>Trip Type</option>
-              <option>Group Trips</option>
-              <option>Tour Packages</option>
-              <option>Corporate</option>
-              <option>Custom</option>
+    <section className="py-12 bg-gray-100 border-t">
+      <div className="container mx-auto flex flex-wrap gap-6 justify-center">
+        <select className="p-3 border rounded">
+          <option>Group Trips</option>
+          <option>Tour Packages</option>
+        </select>
+        <button className="px-6 py-2 bg-purple-600 text-white rounded">Apply Filters</button>
+      </div>
             </select>
             <select className="w-full border p-2 rounded">
               <option>Squad Size</option>
