@@ -1,105 +1,156 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [tab, setTab] = useState("login");
   const router = useRouter();
 
+  // Handle login
   const handleLogin = (e) => {
     e.preventDefault();
-    router.push("/profile"); // redirect after login
+    // 🚨 Replace with real login logic later
+    router.push("/profile");
   };
 
+  // Handle signup
   const handleSignup = (e) => {
     e.preventDefault();
-    router.push("/profile"); // redirect after signup
+    // 🚨 Replace with real signup logic later
+    router.push("/profile");
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-r from-pink-500 to-purple-600">
-      <div className="bg-white w-full max-w-4xl rounded-lg shadow-lg overflow-hidden grid md:grid-cols-2">
-        
-        {/* Left Illustration */}
-        <div className="hidden md:flex items-center justify-center bg-gradient-to-b from-yellow-400 to-orange-500 p-8">
-          <img src="/images/van-illustration.png" alt="Carvaan Van" className="max-h-80" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-200 via-pink-200 to-yellow-200 p-6">
+      <div className="bg-white shadow-2xl rounded-lg w-full max-w-4xl flex overflow-hidden">
+        {/* Left side illustration */}
+        <div className="hidden md:flex flex-1 items-center justify-center bg-gradient-to-r from-purple-600 to-pink-500 text-white p-10">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-4">
+              Join the Carvaan Community 🚐✨
+            </h1>
+            <p className="italic">
+              Your next trip starts here. Earn coins. Unlock adventures.
+            </p>
+          </div>
         </div>
 
-        {/* Right Form */}
-        <div className="p-8">
-          <h1 className="text-3xl font-bold text-center mb-2">
-            Join the Carvaan Community 🚐✨
-          </h1>
-          <p className="text-center font-shadow mb-6">
-            Your next trip starts here. Earn coins. Unlock adventures.
-          </p>
-
+        {/* Right side form */}
+        <div className="flex-1 p-8">
           {/* Toggle Tabs */}
-          <div className="flex border-b mb-6">
+          <div className="flex mb-6 border-b">
             <button
-              className={`flex-1 py-2 font-semibold ${isLogin ? "border-b-2 border-purple-600 text-purple-600" : "text-gray-500"}`}
-              onClick={() => setIsLogin(true)}
+              className={`flex-1 py-2 font-semibold ${
+                tab === "login"
+                  ? "border-b-4 border-purple-600 text-purple-600"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setTab("login")}
             >
               🔑 Login
             </button>
             <button
-              className={`flex-1 py-2 font-semibold ${!isLogin ? "border-b-2 border-purple-600 text-purple-600" : "text-gray-500"}`}
-              onClick={() => setIsLogin(false)}
+              className={`flex-1 py-2 font-semibold ${
+                tab === "signup"
+                  ? "border-b-4 border-purple-600 text-purple-600"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setTab("signup")}
             >
               ✨ Sign Up
             </button>
           </div>
 
-          {/* Forms */}
-          {isLogin ? (
+          {/* Login Form */}
+          {tab === "login" && (
             <form onSubmit={handleLogin} className="space-y-4">
-              <input type="text" placeholder="Email / Mobile Number" required className="w-full border p-3 rounded" />
-              <input type="password" placeholder="Password" required className="w-full border p-3 rounded" />
-              <a href="#" className="text-sm text-purple-600 block text-right">Forgot Password?</a>
-              <button type="submit" className="w-full py-3 rounded bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold hover:opacity-90 transition">
+              <input
+                type="text"
+                placeholder="Email / Mobile Number"
+                className="w-full border p-3 rounded"
+                required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full border p-3 rounded"
+                required
+              />
+              <div className="text-right">
+                <a href="#" className="text-sm text-purple-600">
+                  Forgot Password?
+                </a>
+              </div>
+              <button
+                type="submit"
+                className="w-full py-3 rounded bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold hover:opacity-90"
+              >
                 Log In
               </button>
-              <div className="text-center text-sm text-gray-500">Or login with</div>
-              <div className="flex justify-center gap-3">
-                <button className="p-2 bg-gray-100 rounded">🌐 Google</button>
-                <button className="p-2 bg-gray-100 rounded">📘 Facebook</button>
-                <button className="p-2 bg-gray-100 rounded">💼 LinkedIn</button>
-              </div>
             </form>
-          ) : (
+          )}
+
+          {/* Sign Up Form */}
+          {tab === "signup" && (
             <form onSubmit={handleSignup} className="space-y-4">
-              <input type="text" placeholder="Full Name" required className="w-full border p-3 rounded" />
-              <input type="file" accept="image/*" className="w-full border p-3 rounded" />
-              <input type="email" placeholder="Email" required className="w-full border p-3 rounded" />
-              <input type="tel" placeholder="Mobile Number" required className="w-full border p-3 rounded" />
-              <input type="password" placeholder="Password" required className="w-full border p-3 rounded" />
-              <input type="password" placeholder="Confirm Password" required className="w-full border p-3 rounded" />
-              <select className="w-full border p-3 rounded">
-                <option>Choose Category</option>
+              <input
+                type="text"
+                placeholder="Full Name"
+                className="w-full border p-3 rounded"
+                required
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                className="w-full border p-3 rounded"
+                required
+              />
+              <input
+                type="tel"
+                placeholder="Mobile Number"
+                className="w-full border p-3 rounded"
+                required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full border p-3 rounded"
+                required
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                className="w-full border p-3 rounded"
+                required
+              />
+              <select className="w-full border p-3 rounded" required>
+                <option value="">Choose Category</option>
                 <option>Traveler</option>
                 <option>Corporate</option>
                 <option>Captain / Group Trip Company</option>
               </select>
-              <button type="submit" className="w-full py-3 rounded bg-yellow-400 hover:bg-yellow-500 text-black font-semibold transition">
+              <button
+                type="submit"
+                className="w-full py-3 rounded bg-yellow-500 text-white font-bold hover:opacity-90"
+              >
                 Create My Account
               </button>
-              <p className="text-center text-sm mt-2">🎉 You’ll earn <b>5000 Carvaan Coins</b> on your first booking!</p>
+              <p className="text-sm text-center text-gray-500 mt-2">
+                🎉 You’ll earn <strong>5000 Carvaan Coins</strong> on your first
+                booking!
+              </p>
             </form>
           )}
 
           {/* Trust Signals */}
-          <div className="mt-6 text-center space-y-2">
-            <p>🚐 Book & Compare Trips Easily</p>
-            <p>💰 Earn & Redeem Carvaan Coins</p>
-            <p>👯 Join 1000+ Travelers</p>
-          </div>
-          <div className="mt-4 flex justify-center gap-4 text-sm text-gray-500">
-            <span>🔒 Secure Login</span>
-            <span>✅ GDPR Compliant</span>
-            <span>⭐ Trusted by 1000+</span>
+          <div className="mt-8 text-center space-y-2">
+            <p className="text-sm">🔒 Secure Login</p>
+            <p className="text-sm">✅ GDPR Compliant</p>
+            <p className="text-sm">⭐ Trusted by 1000+ Travelers</p>
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
