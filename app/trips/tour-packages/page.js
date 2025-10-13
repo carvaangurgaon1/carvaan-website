@@ -214,7 +214,7 @@ export default function TourPackagesPage() {
           href="/"
           className="inline-block mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
         >
-          ← Back to Homepage
+          ← Back to Trips
         </Link>
       </section>
 
