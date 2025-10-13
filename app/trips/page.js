@@ -25,29 +25,5 @@ export default function TripsPage() {
       <FinalCTA />
     </main>
   );
-
-import Link from "next/link";
-
-export default function TripsPage() {
-  return (
-    <main className="py-20 bg-gray-50">
-      <section className="text-center">
-        <h1 className="text-4xl font-bold mb-4 text-purple-600">
-          Trips Marketplace 🚐
-        </h1>
-        <p className="text-gray-600 mb-8">
-          Find your next adventure — from weekend getaways to captain-led explorations.
-        </p>
-
-        {/* Add this link to navigate */}
-        <Link
-          href="/trips/group-trips"
-          className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90"
-        >
-          View All Group Trips
-        </Link>
-      </section>
-    </main>
-  );
 }
 
