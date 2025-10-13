@@ -47,8 +47,6 @@ export default function TourPackages() {
     View All Tour Packages →
   </Link>
 </section>
- );
-
 import Link from "next/link";
 
 export default function TourPackages() {
