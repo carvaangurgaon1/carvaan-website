@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { FiPackage, FiUsers, FiShoppingCart, FiDollarSign, FiClock } from "react-icons/fi";
-
+import { FiMenu, FiX, FiPackage, FiUsers, FiMail, FiUser, FiShoppingCart, FiTag, FiClipboard, FiDollarSign, FiClock } from 'react-icons/fi';
 export default function AdminDashboard() {
   const [date, setDate] = useState("");
 
