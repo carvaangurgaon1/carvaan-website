@@ -44,9 +44,10 @@ export default function TourPackages() {
     href="/trips/tour-packages"
     className="inline-block bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
   >
-    View All Tour Packages →
-  </Link>
-</section>
+        View All Tour Packages →
+      </Link>
+    </section>
+  );
 import Link from "next/link";
 
 export default function TourPackages() {
