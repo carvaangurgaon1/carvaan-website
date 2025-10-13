@@ -1,4 +1,4 @@
-// eslint.config.mjs
+// eslint.config.js
 import nextPlugin from 'eslint-config-next';
 
 export default [
