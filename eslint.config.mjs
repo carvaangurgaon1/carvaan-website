@@ -1,10 +1,11 @@
-// eslint.config.js
+// eslint.config.mjs
 import nextPlugin from 'eslint-config-next';
 
 export default [
   {
-    // Files/folders to ignore
     ignores: ['node_modules', '.next', 'dist'],
+    // skip the @rushstack patch (works around the error)
+    plugins: [],
   },
   ...nextPlugin(),
 ];
