@@ -34,4 +34,17 @@ export default function TourPackages() {
       </div>
     </section>
   );
+<section className="text-center py-16 bg-gray-50">
+  <h2 className="text-3xl font-bold text-purple-700 mb-4">Tour Packages ✈️</h2>
+  <p className="text-gray-600 mb-6">
+    Discover exclusive Carvaan tour packages crafted for every kind of traveler.
+  </p>
+
+  <Link
+    href="/trips/tour-packages"
+    className="inline-block bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
+  >
+    View All Tour Packages →
+  </Link>
+</section>
 }
