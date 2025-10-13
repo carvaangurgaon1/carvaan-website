@@ -4,7 +4,9 @@ export default function TourPackages() {
     { id: 1, title: "Rajasthan Royal Escape", duration: "6 Days", price: 30000, image: "/rajasthan.jpg" },
     { id: 2, title: "Himalayan Trek", duration: "7 Days", price: 35000, image: "/himalaya.jpg" },
     { id: 3, title: "Kerala Backwaters", duration: "5 Days", price: 25000, image: "/kerala.jpg" },
-  ];
+ ],
+};
+
 import Link from "next/link";
 
 export default function TourPackages() {
