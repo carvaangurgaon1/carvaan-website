@@ -1,4 +1,4 @@
-"use client";
+// app/admin/layout.tsx
 import { useState } from "react";
 import Link from "next/link";
 import { FiMenu, FiX, FiPackage, FiUsers, FiMail, FiUser, FiShoppingCart, FiTag, FiClipboard } from "react-icons/fi";
