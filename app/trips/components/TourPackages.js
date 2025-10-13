@@ -1,15 +1,13 @@
 // app/trips/components/TourPackages.js
+import Link from "next/link";
+
 export default function TourPackages() {
   const packages = [
     { id: 1, title: "Rajasthan Royal Escape", duration: "6 Days", price: 30000, image: "/rajasthan.jpg" },
     { id: 2, title: "Himalayan Trek", duration: "7 Days", price: 35000, image: "/himalaya.jpg" },
     { id: 3, title: "Kerala Backwaters", duration: "5 Days", price: 25000, image: "/kerala.jpg" },
- ],
-};
+  ];
 
-import Link from "next/link";
-
-export default function TourPackages() {
   return (
     <section className="py-16 bg-gray-50 text-center">
       <h2 className="text-3xl font-bold text-purple-600 mb-4">Tour Packages ✈️</h2>
@@ -17,27 +15,33 @@ export default function TourPackages() {
         Explore handpicked tour packages designed for comfort, adventure, and unforgettable memories.
       </p>
 
-      {/* Example: Preview 3 tour packages */}
       <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 mb-8">
-        {[1, 2, 3].map((pkg) => (
+        {packages.map((pkg) => (
           <div
-            key={pkg}
-            className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition"
+            key={pkg.id}
+            className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition overflow-hidden"
           >
             <img
-              src={`https://source.unsplash.com/400x250/?holiday,${pkg}`}
-              alt="Tour Package"
-              className="rounded-lg mb-4"
+              src={pkg.image}
+              alt={pkg.title}
+              className="w-full h-48 object-cover rounded-t-xl"
             />
-            <h3 className="text-lg font-semibold text-gray-800">
-              Kashmir Escape {pkg}
-            </h3>
-            <p className="text-gray-600 text-sm mt-2">Starts from ₹12,499</p>
+            <div className="p-6 text-left">
+              <h3 className="text-xl font-semibold mb-2">{pkg.title}</h3>
+              <p className="text-gray-500">{pkg.duration}</p>
+              <p className="text-purple-600 font-bold">₹{pkg.price.toLocaleString()}</p>
+              <p className="text-sm text-gray-600 mt-1">
+                Earn <span className="font-semibold">{Math.floor(pkg.price * 0.1)}</span> Coins (₹{(pkg.price * 0.1).toLocaleString()} value)
+              </p>
+              <div className="mt-4 flex gap-3">
+                <button className="bg-purple-600 text-white px-4 py-2 rounded">Book Now</button>
+                <button className="border px-4 py-2 rounded">Save</button>
+              </div>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* 🔗 Add navigation link to Tour Packages Sub Page */}
       <Link
         href="/trips/tour-packages"
         className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
@@ -47,4 +51,3 @@ export default function TourPackages() {
     </section>
   );
 }
-
