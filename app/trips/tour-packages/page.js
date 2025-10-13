@@ -1,139 +1,246 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+
+// Package data
+const packagesData = [
+  // International Packages
+  {
+    id: 1,
+    category: "International",
+    name: "Azerbaijan",
+    subtitle: "The Land of Fire",
+    image: "/Azerbaijan.jpg",
+  },
+  {
+    id: 2,
+    category: "International",
+    name: "Bali",
+    subtitle: "Island of the Gods",
+    image: "/Bali.jpg",
+  },
+  {
+    id: 3,
+    category: "International",
+    name: "Dubai",
+    subtitle: "The City of Wonders",
+    image: "/Dubai.jpg",
+  },
+  {
+    id: 4,
+    category: "International",
+    name: "Singapore",
+    subtitle: "The Lion City",
+    image: "/Singapore.jpg",
+  },
+  {
+    id: 5,
+    category: "International",
+    name: "Thailand",
+    subtitle: "Where Adventure Meets Serenity",
+    image: "/Thailand.jpg",
+  },
+  {
+    id: 6,
+    category: "International",
+    name: "Vietnam",
+    subtitle: "Nature's Hidden Gem",
+    image: "/Vietnam.jpg",
+  },
+
+  // Honeymoon Packages
+  {
+    id: 7,
+    category: "Honeymoon",
+    name: "Goa",
+    subtitle: "Sun, Sand and Serenity",
+    image: "/Goa.jpg",
+  },
+  {
+    id: 8,
+    category: "Honeymoon",
+    name: "Indonesia",
+    subtitle: "A Tropical Haven of Beauty",
+    image: "/Indonesia.jpg",
+  },
+  {
+    id: 9,
+    category: "Honeymoon",
+    name: "Kerala",
+    subtitle: "The Backwaters of Bliss",
+    image: "/Kerala.jpg",
+  },
+  {
+    id: 10,
+    category: "Honeymoon",
+    name: "Maldives",
+    subtitle: "Paradise on the Ocean",
+    image: "/Maldives.jpg",
+  },
+  {
+    id: 11,
+    category: "Honeymoon",
+    name: "Manali",
+    subtitle: "Heaven on Earth",
+    image: "/Manali.jpg",
+  },
+  {
+    id: 12,
+    category: "Honeymoon",
+    name: "Mauritius",
+    subtitle: "The Island of Love",
+    image: "/Mauritius.jpg",
+  },
+
+  // Religious Packages
+  {
+    id: 13,
+    category: "Religious",
+    name: "Ayodhya",
+    subtitle: "Birthplace of Lord Ram",
+    image: "/Ayodhya.jpg",
+  },
+  {
+    id: 14,
+    category: "Religious",
+    name: "Char Dham Yatra",
+    subtitle: "Sacred Journey of the Gods",
+    image: "/Char.jpg",
+  },
+  {
+    id: 15,
+    category: "Religious",
+    name: "Dwarkadhish",
+    subtitle: "The Holy City of Lord Krishna",
+    image: "/Dwarkadhish.png",
+  },
+  {
+    id: 16,
+    category: "Religious",
+    name: "Golden Temple",
+    subtitle: "Spiritual Serenity of Amritsar",
+    image: "/Golden Temple.jpg",
+  },
+  {
+    id: 17,
+    category: "Religious",
+    name: "Tungnath",
+    subtitle: "The Highest Shiva Temple",
+    image: "/Tungnath.webp",
+  },
+  {
+    id: 18,
+    category: "Religious",
+    name: "Vaishno Devi",
+    subtitle: "Divine Blessings in the Himalayas",
+    image: "/Vaishno Devi.webp",
+  },
+
+  // Trending Packages
+  {
+    id: 19,
+    category: "Trending",
+    name: "Andaman & Nicobar",
+    subtitle: "Emerald Islands of the Bay",
+    image: "/AndamanNicobar.a22989ca.jpg",
+  },
+  {
+    id: 20,
+    category: "Trending",
+    name: "Bhutan",
+    subtitle: "The Kingdom of Happiness",
+    image: "/Bhutan.f13bb129.webp",
+  },
+  {
+    id: 21,
+    category: "Trending",
+    name: "Japan",
+    subtitle: "Land of the Rising Sun",
+    image: "/Japan.1808cd48.jpg",
+  },
+  {
+    id: 22,
+    category: "Trending",
+    name: "Kashmir",
+    subtitle: "Paradise on Earth",
+    image: "/Kashmir.47d1d1c4.jpg",
+  },
+  {
+    id: 23,
+    category: "Trending",
+    name: "Ladakh",
+    subtitle: "Land of High Passes",
+    image: "/Ladakh.12e8a4d9.jpg",
+  },
+  {
+    id: 24,
+    category: "Trending",
+    name: "Sri Lanka",
+    subtitle: "The Pearl of the Indian Ocean",
+    image: "/Sri Lanka.dc080185.webp",
+  },
+];
 
 export default function TourPackagesPage() {
-  // Example data (replace this with API data later)
-  const packages = [
-    {
-      id: 1,
-      name: "Manali Tour Package",
-      location: "Manali, Himachal Pradesh",
-      price: 8999,
-      duration: "4N/5D",
-      image: "https://source.unsplash.com/400x250/?manali,mountains,travel",
-      description:
-        "Enjoy the serene beauty of Himachal with our Manali getaway — ideal for friends, couples, and solo travelers.",
-    },
-    {
-      id: 2,
-      name: "Goa Tour Package",
-      location: "Goa, India",
-      price: 11999,
-      duration: "3N/4D",
-      image: "https://source.unsplash.com/400x250/?goa,beach,travel",
-      description:
-        "A sun-soaked vacation with beach vibes, parties, and relaxation — perfect for a refreshing break.",
-    },
-    {
-      id: 3,
-      name: "Kedarnath Yatra Package",
-      location: "Kedarnath, Uttarakhand",
-      price: 10999,
-      duration: "5N/6D",
-      image: "https://source.unsplash.com/400x250/?kedarnath,temple,spiritual",
-      description:
-        "A spiritual retreat to Kedarnath with comfortable stays and guided temple visits.",
-    },
-    {
-      id: 4,
-      name: "Jaipur Heritage Tour",
-      location: "Jaipur, Rajasthan",
-      price: 7999,
-      duration: "3N/4D",
-      image: "https://source.unsplash.com/400x250/?jaipur,fort,heritage",
-      description:
-        "Experience royal Rajasthan through Jaipur’s forts, palaces, and colorful bazaars.",
-    },
-    {
-      id: 5,
-      name: "Kashmir Paradise Tour",
-      location: "Srinagar, Kashmir",
-      price: 13999,
-      duration: "5N/6D",
-      image: "https://source.unsplash.com/400x250/?kashmir,lake,travel",
-      description:
-        "Heaven on earth awaits — explore Dal Lake, Gulmarg, and the lush valleys of Kashmir.",
-    },
-  ];
-
-  // Filters
   const [search, setSearch] = useState("");
-  const [duration, setDuration] = useState("");
-  const [budget, setBudget] = useState("");
+  const [category, setCategory] = useState("");
 
-  const filteredPackages = packages.filter((pkg) => {
+  const filteredPackages = packagesData.filter((pkg) => {
     const matchesSearch =
       pkg.name.toLowerCase().includes(search.toLowerCase()) ||
-      pkg.location.toLowerCase().includes(search.toLowerCase());
-
-    const matchesDuration = duration ? pkg.duration === duration : true;
-    const matchesBudget = budget
-      ? (budget === "low" && pkg.price <= 10000) ||
-        (budget === "mid" && pkg.price > 10000 && pkg.price <= 15000) ||
-        (budget === "high" && pkg.price > 15000)
-      : true;
-
-    return matchesSearch && matchesDuration && matchesBudget;
+      pkg.subtitle.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = category ? pkg.category === category : true;
+    return matchesSearch && matchesCategory;
   });
 
   const clearFilters = () => {
     setSearch("");
-    setDuration("");
-    setBudget("");
+    setCategory("");
   };
+
+  const categories = ["International", "Honeymoon", "Religious", "Trending"];
 
   return (
     <main className="min-h-screen bg-gray-50">
-      {/* HERO SECTION */}
-      <section className="text-center py-12 bg-gradient-to-r from-orange-100 to-yellow-100">
-        <h1 className="text-4xl font-bold text-orange-700 mb-2">
+      {/* HERO */}
+      <section className="text-center py-12 bg-gradient-to-r from-blue-100 to-blue-200">
+        <h1 className="text-4xl font-bold text-blue-800 mb-2">
           Carvaan Tour Packages ✈️
         </h1>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          Handpicked travel experiences — family vacations, honeymoon specials, and adventure tours.
+          Explore handpicked international, honeymoon, religious, and trending tour packages.
         </p>
         <Link
-          href="/trips"
-          className="inline-block mt-6 bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
+          href="/"
+          className="inline-block mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
         >
-          ← Back to Trips
+          ← Back to Homepage
         </Link>
       </section>
 
-      {/* FILTER BAR */}
+      {/* FILTERS */}
       <div className="sticky top-20 z-30 bg-white shadow-md py-4 px-6 mb-10">
         <div className="max-w-7xl mx-auto flex flex-wrap gap-4 justify-center">
           <input
             type="text"
-            placeholder="Search destination or package..."
+            placeholder="Search package or subtitle..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border border-gray-300 rounded-md px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="border border-gray-300 rounded-md px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-
           <select
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-            className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
-            <option value="">All Durations</option>
-            <option value="3N/4D">3N/4D</option>
-            <option value="4N/5D">4N/5D</option>
-            <option value="5N/6D">5N/6D</option>
+            <option value="">All Categories</option>
+            {categories.map((cat, idx) => (
+              <option key={idx} value={cat}>
+                {cat}
+              </option>
+            ))}
           </select>
-
-          <select
-            value={budget}
-            onChange={(e) => setBudget(e.target.value)}
-            className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
-          >
-            <option value="">All Budgets</option>
-            <option value="low">Below ₹10,000</option>
-            <option value="mid">₹10,000 – ₹15,000</option>
-            <option value="high">Above ₹15,000</option>
-          </select>
-
           <button
             onClick={clearFilters}
             className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 transition"
@@ -151,26 +258,21 @@ export default function TourPackagesPage() {
               key={pkg.id}
               className="bg-white rounded-xl shadow-md hover:shadow-xl transition overflow-hidden"
             >
-              <img
-                src={pkg.image}
-                alt={pkg.name}
-                className="w-full h-52 object-cover"
-              />
+              <div className="relative w-full h-52">
+                <Image
+                  src={pkg.image}
+                  alt={pkg.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
               <div className="p-5 text-left">
-                <h3 className="text-xl font-semibold text-gray-800">
-                  {pkg.name}
-                </h3>
-                <p className="text-gray-500 text-sm mt-1">{pkg.location}</p>
-                <p className="text-gray-700 text-sm mt-2">{pkg.duration}</p>
-                <p className="text-orange-600 font-bold mt-2">
-                  ₹{pkg.price.toLocaleString()}
-                </p>
-                <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-                  {pkg.description}
-                </p>
+                <h3 className="text-xl font-semibold text-gray-800">{pkg.name}</h3>
+                <p className="text-gray-500 text-sm mt-1">{pkg.subtitle}</p>
+                <p className="text-gray-600 mt-2">Category: {pkg.category}</p>
                 <Link
                   href="#"
-                  className="inline-block mt-3 text-orange-600 hover:text-pink-600 font-semibold"
+                  className="inline-block mt-3 text-blue-600 hover:text-blue-800 font-semibold"
                 >
                   View Details →
                 </Link>
@@ -179,7 +281,7 @@ export default function TourPackagesPage() {
           ))
         ) : (
           <p className="text-center text-gray-500 col-span-full">
-            No packages match your filters. Try different criteria.
+            No packages match your filters.
           </p>
         )}
       </section>
