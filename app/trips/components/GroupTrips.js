@@ -23,76 +23,43 @@ const groupTrips = {
   ],
 };
 
+import Link from "next/link";
+
 export default function GroupTrips() {
-  const [compareList, setCompareList] = useState([]);
-
-  const toggleCompare = (trip) => {
-    if (compareList.find((t) => t.id === trip.id)) {
-      setCompareList(compareList.filter((t) => t.id !== trip.id));
-    } else if (compareList.length < 5) {
-      setCompareList([...compareList, trip]);
-    }
-  };
-
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto text-center">
-        <h2 className="text-5xl font-bold mb-6 text-purple-700">✨ Group Trips – Carvaan’s Heart</h2>
-        <p className="text-lg text-gray-600 mb-12">Curated trips for squads, families, and explorers. More people, more memories.</p>
+    <section className="py-16 bg-white text-center">
+      <h2 className="text-3xl font-bold text-purple-600 mb-4">Group Trips 🚐</h2>
+      <p className="text-gray-600 mb-10 max-w-2xl mx-auto">
+        Join our exciting community trips — discover destinations, meet people, and explore together.
+      </p>
 
-        {Object.entries(groupTrips).map(([location, trips]) => (
-          <div key={location} className="mb-12 text-left">
-            <h3 className="text-2xl font-semibold mb-4">{location} Trips</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              {trips.map((trip) => (
-                <div key={trip.id} className="border rounded p-4 shadow hover:shadow-lg transition">
-                  <h4 className="font-bold text-lg">{trip.title}</h4>
-                  <p className="text-gray-600">{trip.duration}</p>
-                  <p className="text-purple-600 font-semibold">₹{trip.price.toLocaleString()}</p>
-                  <p className="text-sm text-gray-500">{trip.highlights}</p>
-                  <button
-                    onClick={() => toggleCompare(trip)}
-                    className={`mt-3 px-4 py-2 rounded ${
-                      compareList.find((t) => t.id === trip.id) ? "bg-red-500 text-white" : "bg-purple-600 text-white"
-                    }`}
-                  >
-                    {compareList.find((t) => t.id === trip.id) ? "Remove" : "Compare"}
-                  </button>
-                </div>
-              ))}
-            </div>
+      {/* Example: Preview 3 group trips */}
+      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 mb-8">
+        {[1, 2, 3].map((trip) => (
+          <div
+            key={trip}
+            className="bg-gray-50 rounded-xl shadow-lg p-6 hover:shadow-2xl transition"
+          >
+            <img
+              src={`https://source.unsplash.com/400x250/?travel,${trip}`}
+              alt="Group Trip"
+              className="rounded-lg mb-4"
+            />
+            <h3 className="text-lg font-semibold text-gray-800">
+              Manali Adventure {trip}
+            </h3>
+            <p className="text-gray-600 text-sm mt-2">Starts from ₹9,999</p>
           </div>
         ))}
-
-        {/* Compare Table */}
-        {compareList.length > 0 && (
-          <div className="mt-12 overflow-x-auto">
-            <h3 className="text-2xl font-semibold mb-4">Compare Selected Trips</h3>
-            <table className="w-full border text-left">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="p-3">Trip</th>
-                  <th className="p-3">Duration</th>
-                  <th className="p-3">Price</th>
-                  <th className="p-3">Coins</th>
-                  <th className="p-3">Highlights</th>
-                </tr>
-              </thead>
-              <tbody>
-                {compareList.map((trip) => (
-                  <tr key={trip.id}>
-                    <td className="p-3">{trip.title}</td>
-                    <td className="p-3">{trip.duration}</td>
-                    <td className="p-3">₹{trip.price.toLocaleString()}</td>
-                    <td className="p-3">{trip.price}</td>
-                    <td className="p-3">{trip.highlights}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
       </div>
+
+      {/* 🔗 Add navigation link */}
+      <Link
+        href="/trips/group-trips"
+        className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
+      >
+        View All Group Trips →
+      </Link>
     </section>
   );
 }
