@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { FiSave } from "react-icons/fi";
 
@@ -13,15 +14,30 @@ export default function CreatePackagePage() {
     startDate: "",
     discountPrice: "",
     actualPrice: "",
+    captain: "",
     transportation: "",
+    accommodation: "",
     roomSharing: "",
+    network: "",
+    photography: "",
     difficulty: "",
+    localExperience: "",
     travelStyle: "",
+    tripPace: "",
+    firstTime: "No",
+    discountsAvailable: "No",
     ageRange: "",
+    foodOptions: "",
+    groupSize: "",
+    flightsInclusive: "No",
+    citiesIncluded: "",
     inclusions: "",
     exclusions: "",
-    description: "", // ✅ added missing field
+    packingGuide: "",
+    itinerary: "",
+    meals: "",
     handpicked: "No",
+    trending: "No",
     isActive: "Yes",
   });
 
@@ -30,8 +46,8 @@ export default function CreatePackagePage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevents any unwanted navigation
     console.log("Package Created:", formData);
     alert("✅ Package Created Successfully!");
   };
@@ -42,9 +58,11 @@ export default function CreatePackagePage() {
 
       <form
         onSubmit={handleSubmit}
+        action="#"
+        method="post"
         className="grid lg:grid-cols-3 gap-8 bg-white p-6 rounded-xl shadow-md border"
       >
-        {/* Left Section — Main Form */}
+        {/* LEFT SECTION */}
         <div className="lg:col-span-2 space-y-8">
           {/* Section 1 — Basic Info */}
           <div>
@@ -78,8 +96,8 @@ export default function CreatePackagePage() {
           <div>
             <h2 className="text-lg font-semibold text-purple-600 mb-3">Pricing & Availability</h2>
             <div className="grid md:grid-cols-2 gap-4">
-              <input name="discountPrice" type="number" placeholder="Discount Price*" value={formData.discountPrice} onChange={handleChange} className="border rounded-md px-4 py-2" />
-              <input name="actualPrice" type="number" placeholder="Actual Price*" value={formData.actualPrice} onChange={handleChange} className="border rounded-md px-4 py-2" />
+              <input name="discountPrice" type="number" placeholder="Discount Price Per Person*" value={formData.discountPrice} onChange={handleChange} className="border rounded-md px-4 py-2" />
+              <input name="actualPrice" type="number" placeholder="Actual Price Per Person*" value={formData.actualPrice} onChange={handleChange} className="border rounded-md px-4 py-2" />
               <select name="isActive" value={formData.isActive} onChange={handleChange} className="border rounded-md px-4 py-2">
                 <option value="Yes">Active</option>
                 <option value="No">Inactive</option>
@@ -96,7 +114,7 @@ export default function CreatePackagePage() {
             <h2 className="text-lg font-semibold text-purple-600 mb-3">Features & Options</h2>
             <div className="grid md:grid-cols-2 gap-4">
               <select name="difficulty" value={formData.difficulty} onChange={handleChange} className="border rounded-md px-4 py-2">
-                <option value="">Trip Difficulty*</option>
+                <option value="">Trip Difficulty Level*</option>
                 <option>Easy</option>
                 <option>Moderate</option>
                 <option>Difficult</option>
@@ -125,17 +143,41 @@ export default function CreatePackagePage() {
           {/* Section 5 — Description */}
           <div>
             <h2 className="text-lg font-semibold text-purple-600 mb-3">Description & Content</h2>
-            <textarea name="description" placeholder="Write full package description..." value={formData.description} onChange={handleChange} rows={4} className="border rounded-md w-full px-4 py-2" />
-            <textarea name="inclusions" placeholder="Inclusions" value={formData.inclusions} onChange={handleChange} rows={2} className="border rounded-md w-full px-4 py-2 mt-3" />
-            <textarea name="exclusions" placeholder="Exclusions" value={formData.exclusions} onChange={handleChange} rows={2} className="border rounded-md w-full px-4 py-2 mt-3" />
+            <textarea
+              name="description"
+              placeholder="Write full package description..."
+              value={(formData as any).description}
+              onChange={handleChange}
+              rows={4}
+              className="border rounded-md w-full px-4 py-2"
+            />
+            <textarea
+              name="inclusions"
+              placeholder="Inclusions"
+              value={formData.inclusions}
+              onChange={handleChange}
+              rows={2}
+              className="border rounded-md w-full px-4 py-2 mt-3"
+            />
+            <textarea
+              name="exclusions"
+              placeholder="Exclusions"
+              value={formData.exclusions}
+              onChange={handleChange}
+              rows={2}
+              className="border rounded-md w-full px-4 py-2 mt-3"
+            />
           </div>
 
-          <button type="submit" className="bg-purple-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-purple-700 transition flex items-center gap-2">
+          <button
+            type="submit"
+            className="bg-purple-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-purple-700 transition flex items-center gap-2"
+          >
             <FiSave /> Create Package
           </button>
         </div>
 
-        {/* Right Section — Live Preview */}
+        {/* RIGHT SECTION — LIVE PREVIEW */}
         <div className="bg-gray-50 border rounded-lg p-4">
           <h2 className="text-lg font-semibold text-gray-700 mb-3">🪄 Live Preview</h2>
           <div className="space-y-2 text-sm text-gray-700">
