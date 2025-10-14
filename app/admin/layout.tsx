@@ -15,7 +15,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { name: "Package Details", href: "/admin/group-packages/package-details" },
         { name: "Inactive Packages", href: "/admin/group-packages/inactive-packages" },
         { name: "Expired Packages", href: "/admin/group-packages/expired-packages" },
-        { name: "Create Packages", href: "/admin/group-packages/create-packages" },
+        { name: "Create Packages", href: "/admin/group-packages/create" },
       ],
     },
     {
