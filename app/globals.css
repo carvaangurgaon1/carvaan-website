@@ -5,12 +5,12 @@
 /* Import your brand fonts */
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Shadows+Into+Light&display=swap');
 
-/* Global styles */
+/* Global defaults */
 body {
   @apply bg-white text-gray-900 font-raleway;
 }
 
-/* Custom scrollbar (optional for admin UX polish) */
+/* Custom scrollbar for smoother UX */
 ::-webkit-scrollbar {
   width: 8px;
 }
