@@ -2,7 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* custom global styles */
+/* Import your brand fonts */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Shadows+Into+Light&display=swap');
+
+/* Global styles */
 body {
-  font-family: Arial, sans-serif;
+  @apply bg-white text-gray-900 font-raleway;
+}
+
+/* Custom scrollbar (optional for admin UX polish) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fefefe;
+}
+::-webkit-scrollbar-thumb {
+  background: #cd537a; /* Pink */
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b04268;
 }
