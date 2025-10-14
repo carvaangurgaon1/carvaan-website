@@ -5,23 +5,18 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
-  },
-  plugins: [],
-};
-module.exports = {
-  theme: {
     extend: {
       colors: {
-        primary: '#cd537a', // Pink
-        secondary: '#6b5f8e', // Purple
-        accent: '#fabe17', // Yellow
-        white: '#fefefe',
+        primary: "#cd537a", // Pink (CTAs, highlights)
+        secondary: "#6b5f8e", // Purple (headers, gradients)
+        accent: "#fabe17", // Yellow (hover, accents)
+        white: "#fefefe", // Clean background
       },
       fontFamily: {
-        raleway: ['Raleway', 'sans-serif'],
-        shadow: ['"Shadows Into Light"', 'cursive'],
+        raleway: ["Raleway", "sans-serif"],
+        shadow: ['"Shadows Into Light"', "cursive"],
       },
     },
   },
+  plugins: [],
 };
