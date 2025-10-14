@@ -7,10 +7,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#cd537a", // Pink (CTAs, highlights)
-        secondary: "#6b5f8e", // Purple (headers, gradients)
-        accent: "#fabe17", // Yellow (hover, accents)
-        white: "#fefefe", // Clean background
+        primary: "#cd537a", // Pink
+        secondary: "#6b5f8e", // Purple
+        accent: "#fabe17", // Yellow
+        white: "#fefefe",
       },
       fontFamily: {
         raleway: ["Raleway", "sans-serif"],
