@@ -1,4 +1,5 @@
-"use client"; 
+"use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import { FiMenu, FiX, FiPackage, FiUsers, FiMail, FiUser, FiShoppingCart, FiTag, FiClipboard, FiDollarSign, FiClock } from 'react-icons/fi';
@@ -66,9 +67,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex h-screen bg-gray-100 text-gray-900">
       {/* Sidebar */}
-      <div className={`bg-white border-r shadow-lg transition-all duration-300 ${isOpen ? "w-64" : "w-20"}`}>
+      <div
+        className={`bg-white border-r shadow-lg transition-all duration-300 ${
+          isOpen ? "w-64" : "w-20"
+        }`}
+      >
         <div className="flex items-center justify-between px-4 py-3 border-b">
-          <h1 className={`text-xl font-bold text-blue-700 transition-all ${isOpen ? "block" : "hidden"}`}>
+          <h1
+            className={`text-xl font-bold text-blue-700 transition-all ${
+              isOpen ? "block" : "hidden"
+            }`}
+          >
             Carvaan Admin
           </h1>
           <button onClick={() => setIsOpen(!isOpen)} className="text-gray-600">
@@ -76,6 +85,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </button>
         </div>
 
+        {/* Navigation */}
         <nav className="overflow-y-auto px-2 py-4 space-y-2">
           {navItems.map((section, idx) => (
             <div key={idx}>
@@ -107,6 +117,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             Logout
           </button>
         </header>
+
         <div className="p-6">{children}</div>
       </main>
     </div>
