@@ -14,8 +14,8 @@ import {
   FiClipboard,
 } from "react-icons/fi";
 
-export default function AdminLayout({ children }) {
-  const [isOpen, setIsOpen] = useState(true);
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     {
@@ -41,7 +41,6 @@ export default function AdminLayout({ children }) {
       icon: <FiMail />,
       subItems: [
         { name: "Custom Package", href: "/admin/contact-requests/custom-package" },
-        { name: "Contact Details", href: "/admin/contact-requests/contact-details" },
         { name: "Corporate Getaways", href: "/admin/contact-requests/corporate-getaways" },
         { name: "Tour Packages", href: "/admin/contact-requests/tour-packages" },
       ],
@@ -75,26 +74,19 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-secondary to-primary text-white font-raleway">
+    <div className="flex h-screen bg-white text-gray-900 font-raleway">
       {/* Sidebar */}
       <div
-        className={`bg-white text-secondary shadow-xl transition-all duration-300 ${
-          isOpen ? "w-64" : "w-20"
-        }`}
+        className={`fixed z-40 inset-y-0 left-0 bg-secondary text-white shadow-lg transform transition-transform duration-300
+        ${isOpen ? "translate-x-0 w-64" : "-translate-x-full md:translate-x-0 md:w-64"}`}
       >
-        <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200">
-          <h1
-            className={`text-xl font-bold text-primary tracking-wide transition-all ${
-              isOpen ? "block" : "hidden"
-            }`}
-          >
-            Carvaan Admin
-          </h1>
+        <div className="flex items-center justify-between px-4 py-4 border-b border-purple-500">
+          <h1 className="text-xl font-bold text-accent tracking-wide">Carvaan Admin</h1>
           <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="text-gray-600 hover:text-primary"
+            className="text-accent md:hidden"
+            onClick={() => setIsOpen(false)}
           >
-            {isOpen ? <FiX size={20} /> : <FiMenu size={20} />}
+            <FiX size={20} />
           </button>
         </div>
 
@@ -102,16 +94,17 @@ export default function AdminLayout({ children }) {
         <nav className="overflow-y-auto px-3 py-4 space-y-3">
           {navItems.map((section, idx) => (
             <div key={idx}>
-              <div className="flex items-center gap-2 px-2 py-2 font-semibold text-gray-700">
-                <span className="text-lg text-primary">{section.icon}</span>
-                {isOpen && <span>{section.title}</span>}
+              <div className="flex items-center gap-2 text-accent font-semibold uppercase text-sm mb-1">
+                <span>{section.icon}</span>
+                <span>{section.title}</span>
               </div>
-              <div className={`ml-6 space-y-1 ${isOpen ? "block" : "hidden"}`}>
+              <div className="ml-6 space-y-1">
                 {section.subItems.map((item, i) => (
                   <Link
                     key={i}
                     href={item.href}
-                    className="block px-3 py-1.5 text-sm rounded-md text-gray-600 hover:text-primary hover:bg-primary/10 transition-colors"
+                    className="block px-2 py-1.5 text-sm rounded-md hover:bg-accent hover:text-secondary transition"
+                    onClick={() => setIsOpen(false)}
                   >
                     {item.name}
                   </Link>
@@ -122,17 +115,25 @@ export default function AdminLayout({ children }) {
         </nav>
       </div>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto bg-white text-gray-900">
-        <header className="flex items-center justify-between bg-primary text-white px-6 py-4 shadow-md">
-          <h2 className="text-lg font-semibold">Admin Dashboard</h2>
-          <button className="bg-accent text-secondary px-3 py-1 rounded-md font-semibold hover:bg-yellow-400 transition">
+      {/* Content area */}
+      <div className="flex flex-col flex-1 md:ml-64">
+        <header className="flex items-center justify-between bg-white shadow-md px-6 py-4 sticky top-0 z-30">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden text-secondary"
+          >
+            <FiMenu size={24} />
+          </button>
+          <h2 className="text-lg font-semibold text-secondary">Admin Dashboard</h2>
+          <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-pink-700 transition">
             Logout
           </button>
         </header>
 
-        <div className="p-6">{children}</div>
-      </main>
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 bg-gradient-to-br from-white to-gray-50">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
