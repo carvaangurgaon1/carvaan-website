@@ -75,28 +75,38 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ];
 
   return (
-    <div className="flex min-h-screen bg-white font-raleway">
-      {/* Hamburger for Mobile */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-lg shadow-md border border-gray-200"
-      >
-        {isOpen ? <FiX className="text-primary text-2xl" /> : <FiMenu className="text-primary text-2xl" />}
-      </button>
+    <div className="flex min-h-screen bg-white font-raleway relative overflow-hidden">
+      {/* Sidebar Overlay for Mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 z-30 md:hidden"
+          onClick={() => setIsOpen(false)}
+        ></div>
+      )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:relative top-0 left-0 h-screen bg-secondary text-white shadow-lg transition-all duration-300 z-40 
-        ${isOpen ? "w-64" : "w-0 md:w-64"} overflow-hidden`}
+        className={`fixed md:static top-0 left-0 h-screen bg-secondary text-white shadow-xl z-40 transition-all duration-300
+        ${isOpen ? "w-64" : "w-0 md:w-64"} overflow-y-auto`}
       >
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-400">
-          <h1 className="text-xl font-bold tracking-wide text-accent">Carvaan Admin</h1>
+        {/* Sidebar Header */}
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-500 bg-secondary sticky top-0 z-50">
+          <h1 className="text-lg font-bold tracking-wide text-accent whitespace-nowrap">
+            Carvaan Admin
+          </h1>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="md:hidden text-accent text-2xl"
+          >
+            <FiX />
+          </button>
         </div>
 
-        <nav className="overflow-y-auto px-3 py-4 space-y-3">
+        {/* Sidebar Navigation */}
+        <nav className="px-3 py-4 space-y-5">
           {navItems.map((section, idx) => (
             <div key={idx}>
-              <div className="flex items-center gap-3 text-accent font-semibold text-sm uppercase tracking-wide mb-1">
+              <div className="flex items-center gap-3 text-accent font-semibold text-sm uppercase tracking-wide mb-2">
                 <span className="text-lg">{section.icon}</span>
                 <span>{section.title}</span>
               </div>
@@ -116,17 +126,31 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col min-h-screen bg-white">
-        <header className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-secondary to-primary text-white shadow-md">
-          <h2 className="text-lg md:text-xl font-semibold">Admin Dashboard</h2>
-          <button className="bg-accent text-gray-900 font-semibold px-4 py-2 rounded-md hover:bg-yellow-400 transition">
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="md:hidden fixed top-4 left-4 z-50 bg-white border border-gray-300 p-2 rounded-lg shadow-md"
+      >
+        {isOpen ? (
+          <FiX className="text-primary text-xl" />
+        ) : (
+          <FiMenu className="text-primary text-xl" />
+        )}
+      </button>
+
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="flex items-center justify-between px-4 sm:px-6 py-3 bg-gradient-to-r from-secondary to-primary text-white shadow-md sticky top-0 z-20">
+          <h2 className="text-lg sm:text-xl font-semibold">Admin Dashboard</h2>
+          <button className="bg-accent text-gray-900 font-semibold px-4 py-1.5 rounded-md hover:bg-yellow-400 transition">
             Logout
           </button>
         </header>
 
-        <section className="flex-1 p-4 sm:p-6 md:p-8 bg-gray-50">
-          <div className="container mx-auto">{children}</div>
+        {/* Content */}
+        <section className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+          <div className="max-w-7xl mx-auto">{children}</div>
         </section>
       </main>
     </div>
