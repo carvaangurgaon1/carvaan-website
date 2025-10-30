@@ -14,7 +14,6 @@ export default function Navbar() {
     { name: "Contact", href: "/contact" },
   ];
 
-
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
