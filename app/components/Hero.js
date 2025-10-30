@@ -34,8 +34,7 @@ export default function Hero() {
           One Marketplace. Endless <br /> Group Trips. Zero Stress.
         </h1>
         <p className="mt-4 text-lg sm:text-xl text-gray-100 max-w-2xl mx-auto">
-          Discover, compare, and book curated group trips with ease — all in one
-          place.
+          From Solo to Squad, Carvaan has your back.
         </p>
         {/* Search Bar */}
         <form
