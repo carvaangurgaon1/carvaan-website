@@ -4,14 +4,16 @@ import { useState } from "react";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const nav = [
+  const navLinks = [
     { name: "Home", href: "/" },
+    { name: "About Us", href: "/about" },
     { name: "Trips", href: "/trips" },
     { name: "Community", href: "/community" },
-    { name: "Carvaan Coins", href: "/coins" },
-    { name: "Blog", href: "/blog" },
-    { name: "About", href: "/about" },
+    { name: "Coins", href: "/coins" },
+    { name: "FAQ", href: "/faq" },
+    { name: "Contact", href: "/contact" },
   ];
+
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b">
