@@ -1,15 +1,15 @@
 // /app/page.js
 "use client";
-import Hero from "@/components/Hero";
-import HowItWorks from "@/components/HowItWorks";
-import FeaturedTrips from "@/components/FeaturedTrips";
-import WhyCarvaan from "@/components/WhyCarvaan";
-import CommunityStories from "@/components/CommunityStories";
-import TripBuilder from "@/components/TripBuilder";
-import BlogHub from "@/components/BlogHub";
-import CarvaanCoins from "@/components/CarvaanCoins";
-import CaptainsAgents from "@/components/CaptainsAgents";
-import FinalCTA from "@/components/FinalCTA";
+import Hero from "./components/Hero";
+import HowItWorks from "./components/HowItWorks";
+import FeaturedTrips from "./components/FeaturedTrips";
+import WhyCarvaan from "./components/WhyCarvaan";
+import CommunityStories from "./components/CommunityStories";
+import TripBuilder from "./components/TripBuilder";
+import BlogHub from "./components/BlogHub";
+import CarvaanCoins from "./components/CarvaanCoins";
+import CaptainsAgents from "./components/CaptainsAgents";
+import FinalCTA from "./components/FinalCTA";
 export default function HomePage() {
   return (
     <main className="flex flex-col items-center w-full overflow-x-hidden">
