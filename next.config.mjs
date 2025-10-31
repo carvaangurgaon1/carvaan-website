@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  
   images: {
     // Allow external images from Unsplash, Pexels, Pixabay, etc.
     remotePatterns: [
@@ -26,10 +27,12 @@ const nextConfig = {
       },
     ],
   },
+  
   // Optional: optimize build and enable experimental features
   experimental: {
     optimizeCss: true,
     scrollRestoration: true,
   },
 };
+
 export default nextConfig;
