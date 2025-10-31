@@ -1,9 +1,9 @@
+// next.config.mjs
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   
   images: {
-    // Allow external images from Unsplash, Pexels, Pixabay, etc.
     remotePatterns: [
       {
         protocol: "https",
@@ -23,12 +23,11 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "placehold.co", // placeholder image support
+        hostname: "placehold.co",
       },
     ],
   },
   
-  // Optional: optimize build and enable experimental features
   experimental: {
     optimizeCss: true,
     scrollRestoration: true,
@@ -36,7 +35,3 @@ const nextConfig = {
 };
 
 export default nextConfig;
-
-
-
-
