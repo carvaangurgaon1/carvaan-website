@@ -1,4 +1,6 @@
-// app/about/components/OurVision.js
+"use client";
+import { FiGlobe, FiHeart, FiUsers, FiMap } from "react-icons/fi";
+
 export default function OurVision() {
   return (
     <section className="relative text-center text-white py-20">
