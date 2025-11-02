@@ -1,4 +1,6 @@
-// app/about/components/ClosingStatement.js
+"use client";
+import { FiGlobe, FiHeart, FiUsers, FiMap } from "react-icons/fi";
+
 export default function ClosingStatement() {
   return (
     <section className="relative text-center text-white py-20">
