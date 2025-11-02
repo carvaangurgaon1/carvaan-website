@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function TourPackagesSection() {
+export default function TourPackages() {
   const packages = [
     {
       id: 1,
@@ -88,19 +88,5 @@ export default function TourPackagesSection() {
         View All Tour Packages →
       </Link>
     </section>
-  );
-}
-
-
-import TourPackagesSection from "./components/TourPackagesSection";
-
-
-export default function TripsPage() {
-  return (
-    <>
-      <TripsHeroSection />
-      <GroupTripsSection />
-      <TourPackagesSection />
-    </>
   );
 }
