@@ -1,55 +1,88 @@
-// app/trips/components/GroupTrips.js
 "use client";
-import { useState } from "react";
-
-const groupTrips = {
-  Manali: [
-    { id: 1, title: "Manali Adventure 1", duration: "5 Days", price: 15000, highlights: "Trek + Bonfire" },
-    { id: 2, title: "Manali Adventure 2", duration: "6 Days", price: 18000, highlights: "Snow Activities" },
-    { id: 3, title: "Manali Adventure 3", duration: "4 Days", price: 12000, highlights: "Camping + River Rafting" },
-    { id: 4, title: "Manali Adventure 4", duration: "7 Days", price: 22000, highlights: "Luxury Stay + Trek" },
-    { id: 5, title: "Manali Adventure 5", duration: "5 Days", price: 16000, highlights: "Trek + Paragliding" },
-  ],
-  Goa: [
-    { id: 6, title: "Goa Escape 1", duration: "4 Days", price: 14000, highlights: "Beach + Nightlife" },
-    { id: 7, title: "Goa Escape 2", duration: "3 Days", price: 10000, highlights: "Water Sports + Beach" },
-  ],
-  Rishikesh: [
-    { id: 8, title: "Rishikesh Spiritual 1", duration: "3 Days", price: 9000, highlights: "Yoga + Ganga Aarti" },
-    { id: 9, title: "Rishikesh Adventure 2", duration: "4 Days", price: 12000, highlights: "Rafting + Camping" },
-  ],
-  Ladakh: [
-    { id: 10, title: "Ladakh Expedition", duration: "8 Days", price: 40000, highlights: "Biking + Pangong Lake" },
-  ],
-};
-
 import Link from "next/link";
+import Image from "next/image";
 
-export default function GroupTrips() {
+export default function GroupTripsSection() {
+  const trips = [
+    {
+      id: 1,
+      title: "Leh Ladakh Expedition",
+      location: "Ladakh",
+      price: "₹24,999",
+      image: "https://source.unsplash.com/400x300/?ladakh,india",
+      duration: "7 Days",
+    },
+    {
+      id: 2,
+      title: "Kasol & Kheerganga Trek",
+      location: "Himachal",
+      price: "₹11,499",
+      image: "https://source.unsplash.com/400x300/?kasol,trek",
+      duration: "5 Days",
+    },
+    {
+      id: 3,
+      title: "Goa Beach Getaway",
+      location: "Goa",
+      price: "₹15,999",
+      image: "https://source.unsplash.com/400x300/?goa,beach",
+      duration: "4 Days",
+    },
+  ];
+
   return (
     <section className="py-16 bg-white text-center">
-      <h2 className="text-3xl font-bold text-purple-600 mb-4">Group Trips 🚐</h2>
+      {/* Header */}
+      <h2 className="text-3xl md:text-4xl font-bold text-purple-700 mb-4">
+        Group Trips 🚐
+      </h2>
       <p className="text-gray-600 mb-10 max-w-2xl mx-auto">
-        Join our exciting community trips — discover destinations, meet people, and explore together.
+        Join handpicked community trips — make new friends, explore destinations, and travel the Carvaan way.
       </p>
 
-      {/* Example: Preview 3 group trips */}
-      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 mb-8">
-        {[1, 2, 3].map((trip) => (
+      {/* Trip Cards */}
+      <div className="max-w-6xl mx-auto grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8 px-4">
+        {trips.map((trip) => (
           <div
-            key={trip}
-            className="bg-gray-50 rounded-xl shadow-lg p-6 hover:shadow-2xl transition"
+            key={trip.id}
+            className="bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl transition overflow-hidden"
           >
-            <img
-              src={`https://source.unsplash.com/400x250/?travel,${trip}`}
-              alt="Group Trip"
-              className="rounded-lg mb-4"
-            />
-            <h3 className="text-lg font-semibold text-gray-800">
-              Manali Adventure {trip}
-            </h3>
-            <p className="text-gray-600 text-sm mt-2">Starts from ₹9,999</p>
+            <div className="relative w-full h-52">
+              <Image
+                src={trip.image}
+                alt={trip.title}
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            <div className="p-5 text-left">
+              <h3 className="text-xl font-semibold text-gray-800 mb-1">
+                {trip.title}
+              </h3>
+              <p className="text-gray-500">{trip.location}</p>
+              <p className="text-purple-700 font-bold mt-2">{trip.price}</p>
+              <p className="text-sm text-gray-500">{trip.duration}</p>
+
+              <div className="mt-4">
+                <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-md hover:opacity-90 transition">
+                  View Details
+                </button>
+              </div>
+            </div>
           </div>
+        ))}
+      </div>
+
+      {/* CTA */}
+      <div className="mt-12">
+        <Link
+          href="/trips/group-trips"
+          className="bg-yellow-400 text-purple-900 font-semibold px-6 py-3 rounded-md shadow-lg hover:bg-yellow-300 transition"
+        >
+          View All Group Trips →
+        </Link>
+      </div>
         ))}
       </div>
 
