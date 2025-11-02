@@ -34,12 +34,3 @@ export default function JoinMovement() {
     </section>
   );
 }
-
-
-
-
-<section
-  className="relative py-24 text-white text-center bg-cover bg-center"
-  style={{ backgroundImage: "url('/images/join-banner.jpg')" }}
->
-}
