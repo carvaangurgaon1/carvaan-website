@@ -83,8 +83,8 @@ export default function GroupTripsSection() {
           View All Group Trips →
         </Link>
       </div>
-        ))}
-      </div>
+  </section>
+  );
 
       {/* 🔗 Add navigation link */}
       <Link
