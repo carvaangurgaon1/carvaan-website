@@ -1,4 +1,6 @@
-// app/about/components/CTABar.js
+"use client";
+import { FiGlobe, FiHeart, FiUsers, FiMap } from "react-icons/fi";
+
 export default function CTABar() {
   return (
     <section className="bg-purple-700 text-white py-10">
