@@ -1,44 +1,105 @@
-// app/trips/components/Hero.js
-export default function Hero() {
+"use client";
+import { useState } from "react";
+
+export default function TripsHeroSection() {
+  const [filters, setFilters] = useState({
+    destination: "",
+    budget: "",
+    squad: "",
+    theme: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSearch = () => {
+    console.log("Selected Filters:", filters);
+    alert("Search triggered with selected filters!");
+  };
+
   return (
-    <section className="relative bg-gray-900 text-white h-[90vh] flex items-center justify-center">
-      <div className="absolute inset-0 bg-[url('/trip-hero.jpg')] bg-cover bg-center opacity-60 animate-pulse"></div>
-      <div className="relative z-10 text-center px-6">
-        <h1 className="text-5xl md:text-6xl font-raleway font-bold">
-          One Marketplace. Every Journey.
+    <section className="relative bg-gradient-to-r from-purple-700 to-pink-600 text-white py-20 px-6 text-center overflow-hidden">
+      {/* Background overlay */}
+      <div className="absolute inset-0 bg-[url('/trips-hero-bg.jpg')] bg-cover bg-center opacity-30" />
+
+      <div className="relative z-10 max-w-5xl mx-auto space-y-8">
+        <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+          ONE MARKETPLACE. EVERY JOURNEY.
         </h1>
-        <p className="mt-4 text-xl font-[ShadowScript]">
-          From friends to corporates, discover trips made simple.
+        <p className="text-lg md:text-xl text-pink-100">
+          Find, plan, and customize your next adventure with Carvaan.
         </p>
 
-        {/* Sticky Search + Filters */}
-        <div className="mt-8 bg-white text-gray-800 rounded-lg shadow-lg flex flex-wrap justify-center gap-4 p-4 sticky top-4">
-          <input type="text" placeholder="Destination" className="px-4 py-2 border rounded" />
-          <input type="text" placeholder="Budget" className="px-4 py-2 border rounded" />
-          <select className="px-4 py-2 border rounded">
-            <option>Squad Type</option>
-            <option>Friends</option>
-            <option>Families</option>
-            <option>Corporate</option>
+        {/* Filters */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+          <select
+            name="destination"
+            value={filters.destination}
+            onChange={handleChange}
+            className="text-gray-700 px-4 py-3 rounded-md w-full focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Destination</option>
+            <option>Manali</option>
+            <option>Goa</option>
+            <option>Leh Ladakh</option>
+            <option>Kerala</option>
           </select>
-          <select className="px-4 py-2 border rounded">
-            <option>Duration</option>
-            <option>Weekend</option>
-            <option>3–5 Days</option>
-            <option>1 Week</option>
+
+          <select
+            name="budget"
+            value={filters.budget}
+            onChange={handleChange}
+            className="text-gray-700 px-4 py-3 rounded-md w-full focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Budget</option>
+            <option>₹ 5 000 – ₹ 10 000</option>
+            <option>₹ 10 000 – ₹ 20 000</option>
+            <option>₹ 20 000 – ₹ 40 000</option>
+            <option>₹ 40 000+</option>
           </select>
-          <select className="px-4 py-2 border rounded">
-            <option>Theme</option>
+
+          <select
+            name="squad"
+            value={filters.squad}
+            onChange={handleChange}
+            className="text-gray-700 px-4 py-3 rounded-md w-full focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Squad Type</option>
+            <option>Solo Travelers</option>
+            <option>Friends Group</option>
+            <option>Couples</option>
+            <option>Corporate Team</option>
+          </select>
+
+          <select
+            name="theme"
+            value={filters.theme}
+            onChange={handleChange}
+            className="text-gray-700 px-4 py-3 rounded-md w-full focus:ring-2 focus:ring-yellow-400"
+          >
+            <option value="">Theme</option>
             <option>Adventure</option>
             <option>Luxury</option>
-            <option>Wellness</option>
+            <option>Beach</option>
+            <option>Himalayan Escape</option>
           </select>
-          <button className="px-6 py-2 bg-pink-600 text-white rounded-lg">Search</button>
         </div>
 
-        <div className="mt-6 flex justify-center gap-4">
-          <button className="px-6 py-3 bg-purple-600 rounded-lg">Browse All Trips</button>
-          <button className="px-6 py-3 bg-gray-100 text-black rounded-lg">Plan a Custom Trip</button>
+        {/* Buttons */}
+        <div className="flex flex-wrap justify-center gap-4 mt-8">
+          <button
+            onClick={handleSearch}
+            className="bg-yellow-400 text-purple-900 font-semibold px-6 py-3 rounded-md shadow-lg hover:bg-yellow-300 transition"
+          >
+            Browse All Trips
+          </button>
+          <button
+            className="border border-white text-white font-semibold px-6 py-3 rounded-md hover:bg-white hover:text-purple-700 transition"
+          >
+            Plan a Custom Trip
+          </button>
         </div>
       </div>
     </section>
