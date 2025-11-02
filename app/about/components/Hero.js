@@ -20,26 +20,6 @@ export default function HeroAbout() {
           Explore Trips
         </Link>
       </div>
-
-      {/* Contact Info Grid */}
-      <div className="mt-12 grid sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-gray-700">
-        <div>
-          <p className="font-semibold">Email</p>
-          <p>support@carvaan.co</p>
-        </div>
-        <div>
-          <p className="font-semibold">Phone</p>
-          <p>+91 98765 43210</p>
-        </div>
-        <div>
-          <p className="font-semibold">Website</p>
-          <p>reallygreatsite.com</p>
-        </div>
-        <div>
-          <p className="font-semibold">Location</p>
-          <p>123 Anywhere St., Any City</p>
-        </div>
-      </div>
     </section>
   );
 }
