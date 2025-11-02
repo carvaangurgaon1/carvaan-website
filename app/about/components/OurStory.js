@@ -1,30 +1,37 @@
-// app/about/components/OurStory.js
+// /app/components/about/OurStory.js
+"use client";
+import Image from "next/image";
+
 export default function OurStory() {
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto grid md:grid-cols-2 gap-10 items-center">
-        {/* Left: Text */}
+    <section className="relative py-20 bg-white px-6 md:px-12 lg:px-20 text-center md:text-left">
+      <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+        {/* Left text content */}
         <div>
-          <h2 className="text-3xl font-bold mb-4">Our Story</h2>
-          <p className="mb-6">
-            Carvaan was born out of frustration with messy trip planning—
-            multiple agents, endless calls, scattered tabs. We wanted one place
-            where solo travelers, squads, families, and captains could come
-            together. That’s how Carvaan became a marketplace—curated, simple,
-            and community-powered.
+          <h2 className="text-3xl md:text-5xl font-bold text-secondary mb-6">
+            Our Story
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-4">
+            Carvaan began as a passion project to make group travel effortless,
+            fun, and community-driven. We wanted to create a space where
+            wanderlust meets trust — where travelers, captains, and travel
+            agents connect seamlessly.
           </p>
-          <p className="mb-6">
-            Today, we’re not just a platform—we’re a revolution in group travel.
-            A place where memories begin with a click.
+          <p className="text-gray-700 leading-relaxed">
+            What started with a handful of adventurers has now become India’s
+            fastest-growing travel marketplace. Every journey, every story, and
+            every friendship formed along the way adds to the soul of Carvaan.
           </p>
-          <button className="px-6 py-3 bg-purple-600 text-white rounded-lg">
-            Join the Carvaan Community
-          </button>
         </div>
 
-        {/* Right: Carousel (placeholder for now) */}
-        <div className="bg-gray-200 h-80 flex items-center justify-center">
-          <span className="text-gray-500">[Carousel of Group Photos]</span>
+        {/* Right image placeholder */}
+        <div className="relative w-full h-72 md:h-96 rounded-xl overflow-hidden shadow-lg">
+          <Image
+            src="https://source.unsplash.com/800x600/?friends,travel"
+            alt="Travel community"
+            fill
+            className="object-cover"
+          />
         </div>
       </div>
     </section>
