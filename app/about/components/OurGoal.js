@@ -1,4 +1,6 @@
-// app/about/components/OurGoal.js
+"use client";
+import { FiGlobe, FiHeart, FiUsers, FiMap } from "react-icons/fi";
+
 export default function OurGoal() {
   return (
     <section className="py-20 bg-gradient-to-r from-pink-500 to-purple-600 text-center text-white">
