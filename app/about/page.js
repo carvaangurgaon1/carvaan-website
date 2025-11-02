@@ -1,3 +1,4 @@
+"use client";
 import Hero from "./components/Hero";
 import OurStory from "./components/OurStory";
 import OurVision from "./components/OurVision";
