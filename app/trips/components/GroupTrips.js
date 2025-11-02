@@ -83,16 +83,6 @@ export default function GroupTripsSection() {
           View All Group Trips →
         </Link>
       </div>
-  </section>
-  );
-
-      {/* 🔗 Add navigation link */}
-      <Link
-        href="/trips/group-trips"
-        className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
-      >
-        View All Group Trips →
-      </Link>
     </section>
   );
 }
