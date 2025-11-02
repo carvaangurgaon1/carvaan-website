@@ -8,6 +8,7 @@ export default function CustomTripBuilder() {
           <input type="text" placeholder="Choose Location" className="p-3 border rounded" />
           <select className="p-3 border rounded"><option>Duration</option></select>
           <select className="p-3 border rounded"><option>Squad Type</option></select>
+          <select className="p-3 border rounded"><option>Head Count</option></select>
           <select className="p-3 border rounded"><option>Vibe</option></select>
           <input type="number" placeholder="Budget (₹)" className="p-3 border rounded" />
           <button className="col-span-2 bg-purple-600 text-white py-3 rounded">Plan My Trip</button>
