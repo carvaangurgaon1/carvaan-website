@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { FiMapPin, FiClock } from "react-icons/fi";
+import { FiMapPin, FiClock, FiDollarSign } from "react-icons/fi";
 
 export default function FeaturedTrips() {
   // Placeholder data (replace image URLs later)
