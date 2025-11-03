@@ -7,12 +7,16 @@ export default function FAQCategories({ faqs }) {
   const [helpVotes, setHelpVotes] = useState({});
 
   const toggle = (id) => setExpanded((prev) => (prev === id ? null : id));
-  const vote = (id, val) =>
-    setHelpVotes((p) => ({ ...p, [id]: p[id] === val ? null : val }));
 
-  const grouped = faqs.reduce((acc, f) => {
-    if (!acc[f.category]) acc[f.category] = [];
-    acc[f.category].push(f);
+  const vote = (id, val) =>
+    setHelpVotes((prev) => ({
+      ...prev,
+      [id]: prev[id] === val ? null : val,
+    }));
+
+  const grouped = faqs.reduce((acc, faq) => {
+    if (!acc[faq.category]) acc[faq.category] = [];
+    acc[faq.category].push(faq);
     return acc;
   }, {});
 
@@ -20,38 +24,43 @@ export default function FAQCategories({ faqs }) {
     <section className="max-w-6xl mx-auto mt-10 px-4">
       {Object.entries(grouped).map(([category, items]) => (
         <div key={category} className="bg-white shadow rounded-lg border mb-6">
+          {/* Category Header */}
           <div className="px-4 py-3 border-b">
             <h3 className="font-semibold text-gray-700">{category}</h3>
           </div>
+
+          {/* FAQ Items */}
           <div className="divide-y">
-            {items.map((f) => (
-              <div key={f.id} className="px-4 py-3">
+            {items.map((faq) => (
+              <div key={faq.id} className="px-4 py-3">
                 <button
-                  onClick={() => toggle(f.id)}
+                  onClick={() => toggle(faq.id)}
                   className="w-full text-left flex items-start gap-3"
                 >
                   <span className="flex-1">
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-gray-800">{f.q}</span>
+                      <span className="font-medium text-gray-800">{faq.q}</span>
                       <span className="text-gray-400 ml-3">
-                        {expanded === f.id ? "−" : "+"}
+                        {expanded === faq.id ? "−" : "+"}
                       </span>
                     </div>
                     <div className="text-sm text-gray-500 mt-2">
-                      {expanded === f.id
-                        ? f.a
-                        : f.a.slice(0, 120) + (f.a.length > 120 ? "..." : "")}
+                      {expanded === faq.id
+                        ? faq.a
+                        : faq.a.slice(0, 120) +
+                          (faq.a.length > 120 ? "..." : "")}
                     </div>
                   </span>
                 </button>
 
-                {expanded === f.id && (
+                {/* Expanded Section */}
+                {expanded === faq.id && (
                   <div className="mt-3 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <button
-                        onClick={() => vote(f.id, "up")}
+                        onClick={() => vote(faq.id, "up")}
                         className={`px-3 py-1 rounded-md text-sm ${
-                          helpVotes[f.id] === "up"
+                          helpVotes[faq.id] === "up"
                             ? "bg-green-50 text-green-700"
                             : "bg-gray-50"
                         }`}
@@ -59,9 +68,9 @@ export default function FAQCategories({ faqs }) {
                         👍 Helpful
                       </button>
                       <button
-                        onClick={() => vote(f.id, "down")}
+                        onClick={() => vote(faq.id, "down")}
                         className={`px-3 py-1 rounded-md text-sm ${
-                          helpVotes[f.id] === "down"
+                          helpVotes[faq.id] === "down"
                             ? "bg-red-50 text-red-700"
                             : "bg-gray-50"
                         }`}
@@ -69,6 +78,7 @@ export default function FAQCategories({ faqs }) {
                         👎 Not Helpful
                       </button>
                     </div>
+
                     <button
                       onClick={() =>
                         window.scrollTo({
