@@ -1,28 +1,53 @@
-const options = [
-  { icon: "💬", label: "Chat with Us", link: "https://wa.me/919999999999" },
-  { icon: "📩", label: "Drop Us an Email", link: "mailto:support@carvaan.co" },
-  { icon: "📞", label: "Call Support", link: "tel:+919999999999" },
-  { icon: "📚", label: "Explore Travel Guides", link: "/guides" },
-];
-
 export default function QuickHelp() {
   return (
-    <section className="py-16 bg-purple-50">
-      <div className="container mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-6">Quick Help 🚑</h2>
-        <div className="grid md:grid-cols-4 gap-6">
-          {options.map((o, i) => (
-            <a
-              key={i}
-              href={o.link}
-              className="bg-white p-6 rounded shadow hover:shadow-lg transition"
-            >
-              <div className="text-4xl mb-4">{o.icon}</div>
-              <h3 className="font-semibold">{o.label}</h3>
-            </a>
-          ))}
-        </div>
+    <div className="bg-white p-4 rounded-lg shadow border">
+      <h4 className="font-semibold text-gray-700 mb-3">Quick Help</h4>
+      <div className="space-y-3">
+        <a
+          href="https://wa.me/919876543210"
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-3 px-3 py-2 border rounded hover:bg-gray-50"
+        >
+          <span className="bg-green-100 text-green-700 rounded-full w-8 h-8 flex items-center justify-center">
+            💬
+          </span>
+          <div>
+            <div className="text-sm font-medium">Chat on WhatsApp</div>
+            <div className="text-xs text-gray-500">
+              Instant replies for quick queries
+            </div>
+          </div>
+        </a>
+
+        <a
+          href="mailto:support@carvaan.co"
+          className="flex items-center gap-3 px-3 py-2 border rounded hover:bg-gray-50"
+        >
+          <span className="bg-blue-100 text-blue-700 rounded-full w-8 h-8 flex items-center justify-center">
+            ✉️
+          </span>
+          <div>
+            <div className="text-sm font-medium">Email Support</div>
+            <div className="text-xs text-gray-500">
+              Get a detailed reply within 24 hours
+            </div>
+          </div>
+        </a>
+
+        <a
+          href="tel:+919876543210"
+          className="flex items-center gap-3 px-3 py-2 border rounded hover:bg-gray-50"
+        >
+          <span className="bg-yellow-100 text-yellow-800 rounded-full w-8 h-8 flex items-center justify-center">
+            📞
+          </span>
+          <div>
+            <div className="text-sm font-medium">Call Support</div>
+            <div className="text-xs text-gray-500">Mon–Sat, 9am–6pm IST</div>
+          </div>
+        </a>
       </div>
-    </section>
+    </div>
   );
 }
