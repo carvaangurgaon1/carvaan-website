@@ -1,24 +1,33 @@
+"use client";
+
+import Link from "next/link";
+
 export default function Hero() {
   return (
-    <section className="relative flex items-center justify-center h-[70vh] bg-gradient-to-r from-purple-600 to-pink-500 text-white text-center">
-      <div className="relative z-10 max-w-3xl">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">
-          Got Questions? We’ve Got Answers.
-        </h1>
-        <p className="text-xl mb-6 font-shadow">
-          Your guide to stress-free adventures with Carvaan.
-        </p>
-        <div className="flex justify-center gap-4">
-          <a
-            href="https://wa.me/919999999999"
-            className="px-6 py-3 bg-white text-purple-700 font-semibold rounded"
-          >
-            Ask on WhatsApp
-          </a>
-          <button className="px-6 py-3 border border-white rounded font-semibold">
-            Explore Trips
-          </button>
-        </div>
+    <section className="max-w-6xl mx-auto text-center px-4 py-12">
+      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        Got Questions? We’ve Got Answers.
+      </h1>
+      <p className="text-gray-600 mb-6">
+        Your guide to stress-free group travel with Carvaan.
+      </p>
+
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a
+          href="https://wa.me/919876543210?text=Hi%20Carvaan%20%E2%9C%8B%EF%B8%8F%20I%20have%20a%20question"
+          target="_blank"
+          rel="noreferrer"
+          className="inline-block bg-emerald-500 text-white px-5 py-3 rounded-lg shadow hover:brightness-95 transition"
+        >
+          Ask on WhatsApp
+        </a>
+
+        <Link
+          href="/trips"
+          className="inline-block border border-gray-300 px-5 py-3 rounded-lg hover:bg-gray-50 transition"
+        >
+          Explore Trips
+        </Link>
       </div>
     </section>
   );
