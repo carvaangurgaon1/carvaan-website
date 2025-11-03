@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function Stories() {
+export default function EngagementZone() {
   return (
     <section className="bg-gradient-to-r from-pink-100 via-white to-yellow-100 py-20">
       <div className="max-w-7xl mx-auto px-6 text-center">
