@@ -56,10 +56,4 @@
     </div>
   </div>
 </section>
-
-
-
-[
-  "https://source.unsplash.com/400x400/?mountains,travel",
-  ...
 ]
