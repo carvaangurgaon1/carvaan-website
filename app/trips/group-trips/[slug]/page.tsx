@@ -1,33 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTripBySlug } from "@/lib/blobTrips";
 
 export const dynamic = "force-dynamic";
 
-async function fetchTrip(slug: string) {
-  // Try absolute first (works in edge/server environments)
-  const abs = await fetch(
-    `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/api/trips/${slug}`,
-    { cache: "no-store" }
-  ).catch(() => null);
-
-  if (abs && abs.ok) return abs.json();
-
-  // Fallback to relative (also works on Vercel)
-  const rel = await fetch(`/api/trips/${slug}`, { cache: "no-store" }).catch(
-    () => null
-  );
-  if (!rel || !rel.ok) return null;
-  return rel.json();
-}
-
-type PageProps = { params: Promise<{ slug: string }> };
+type PageProps = {
+  params: { slug: string };
+};
 
 export default async function TripDetailPage({ params }: PageProps) {
-  const { slug } = await params;
-  const trip = await fetchTrip(slug);
+  const { slug } = params;
 
-  if (!trip) notFound();
+  const trip = await getTripBySlug(slug);
+  if (!trip) {
+    notFound();
+  }
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -53,13 +41,12 @@ export default async function TripDetailPage({ params }: PageProps) {
             fill
             className="object-cover"
             priority
+            sizes="(max-width: 1024px) 100vw, 50vw"
           />
         </div>
 
         <div className="bg-white rounded-2xl shadow p-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-            {trip.title}
-          </h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{trip.title}</h1>
           <p className="text-gray-600 mt-2">{trip.location}</p>
 
           <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
@@ -76,7 +63,7 @@ export default async function TripDetailPage({ params }: PageProps) {
             <div className="p-3 bg-gray-50 rounded-lg">
               <p className="text-gray-500">Price / Person</p>
               <p className="font-semibold">
-                ₹{Number(trip.price || 0).toLocaleString()}
+                {typeof trip.price === "number" ? `₹${trip.price.toLocaleString()}` : "—"}
               </p>
             </div>
             <div className="p-3 bg-gray-50 rounded-lg">
@@ -111,9 +98,7 @@ export default async function TripDetailPage({ params }: PageProps) {
         <section className="max-w-6xl mx-auto px-6 py-6">
           <div className="bg-white rounded-2xl shadow p-6">
             <h2 className="text-xl font-semibold mb-3">Overview</h2>
-            <p className="text-gray-700 leading-7 whitespace-pre-wrap">
-              {trip.description}
-            </p>
+            <p className="text-gray-700 leading-7 whitespace-pre-wrap">{trip.description}</p>
           </div>
         </section>
       )}
@@ -151,22 +136,14 @@ export default async function TripDetailPage({ params }: PageProps) {
             <h2 className="text-xl font-semibold mb-4">Itinerary</h2>
             <ol className="space-y-4">
               {trip.itinerary.map(
-                (
-                  day: { day: number; title?: string; details?: string },
-                  idx: number
-                ) => (
-                  <li
-                    key={idx}
-                    className="border-l-4 border-purple-300 pl-4 py-1"
-                  >
+                (day: { day: number; title?: string; details?: string }, idx: number) => (
+                  <li key={idx} className="border-l-4 border-purple-300 pl-4 py-1">
                     <p className="font-semibold">
                       Day {day.day}
                       {day.title ? ` — ${day.title}` : ""}
                     </p>
                     {day.details && (
-                      <p className="text-gray-700 mt-1 whitespace-pre-wrap">
-                        {day.details}
-                      </p>
+                      <p className="text-gray-700 mt-1 whitespace-pre-wrap">{day.details}</p>
                     )}
                   </li>
                 )
@@ -183,10 +160,7 @@ export default async function TripDetailPage({ params }: PageProps) {
             <h2 className="text-xl font-semibold mb-4">Select a Start Date</h2>
             <div className="flex flex-wrap gap-3">
               {trip.startDates.map((d: string, i: number) => (
-                <button
-                  key={i}
-                  className="px-4 py-2 rounded-lg border hover:bg-purple-50"
-                >
+                <button key={i} className="px-4 py-2 rounded-lg border hover:bg-purple-50">
                   {new Date(d).toLocaleDateString("en-IN", {
                     day: "2-digit",
                     month: "short",
