@@ -1,78 +1,103 @@
 // lib/blobTrips.ts
 import { put, list } from "@vercel/blob";
 
-export interface Trip {
+// ---------- Types ----------
+export type ItineraryDay = {
+  day: number;
+  title?: string;
+  details?: string;
+};
+
+export type Trip = {
   id: string;
   slug: string;
   title: string;
   location: string;
-  price: number;
-  duration?: string;
+  price: number;             // price per person
+  duration: string;          // e.g. "3N/4D"
   image?: string;
+  mealsPerDay?: number;      // 0 | 1 | 2 | 3
+  startDates: string[];      // ISO strings
   description?: string;
-  inclusions?: string;
-  exclusions?: string;
-  mealsPerDay?: number;
-  startDates?: string[];
-  itinerary?: { day: number; title?: string; details?: string }[];
-  createdAt: string;
-}
+  inclusions?: string;       // newline-separated list
+  exclusions?: string;       // newline-separated list
+  itinerary: ItineraryDay[];
+};
 
-const TOKEN = process.env.BLOB_READ_WRITE_TOKEN!;
-const FILE_KEY = "trips.json";
+// ---------- Internal helpers ----------
+const FILE_NAME = "trips.json";
 
-// Read all trips
-export async function getTrips(): Promise<Trip[]> {
-  const blobs = await list({ token: TOKEN });
-  const file = blobs.blobs.find((b) => b.pathname === FILE_KEY);
-  if (!file) return [];
-  const res = await fetch(file.url, { cache: "no-store" });
+/**
+ * Read trips array from Vercel Blob. Returns [] if not found.
+ */
+async function readTrips(): Promise<Trip[]> {
+  const { blobs } = await list({ prefix: FILE_NAME });
+  const existing = blobs.find((b) => b.pathname === FILE_NAME);
+  if (!existing) return [];
+  const res = await fetch(existing.url, { cache: "no-store" });
   if (!res.ok) return [];
-  const data = await res.json();
-  return Array.isArray(data) ? data : data.trips ?? [];
+  return (await res.json()) as Trip[];
 }
 
-// Overwrite trips file
-export async function upsertTrips(trips: Trip[]): Promise<void> {
-  await put(FILE_KEY, JSON.stringify(trips, null, 2), {
+/**
+ * Write trips array to Vercel Blob at a stable key.
+ */
+async function writeTrips(trips: Trip[]) {
+  await put(FILE_NAME, JSON.stringify(trips, null, 2), {
     access: "public",
     contentType: "application/json",
-    token: TOKEN,
+    addRandomSuffix: false, // keep a stable pathname
   });
 }
 
-// Create a new trip
-export async function createTrip(input: Partial<Trip>): Promise<Trip> {
-  const now = new Date().toISOString();
-  const title = (input.title || "Untitled Trip").trim();
-  const slugBase = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  const slug = `${slugBase}-${Date.now().toString(36)}`;
-
-  const newTrip: Trip = {
-    id: crypto.randomUUID(),
-    slug,
-    title,
-    location: input.location || "",
-    price: Number(input.price || 0),
-    duration: input.duration,
-    image: input.image,
-    description: input.description,
-    inclusions: input.inclusions,
-    exclusions: input.exclusions,
-    mealsPerDay: input.mealsPerDay,
-    startDates: input.startDates ?? [],
-    itinerary: input.itinerary ?? [],
-    createdAt: now,
-  };
-
-  const trips = await getTrips();
-  trips.unshift(newTrip);
-  await upsertTrips(trips);
-  return newTrip;
+// ---------- Public API ----------
+export async function getTrips(): Promise<Trip[]> {
+  return readTrips();
 }
 
-// Get one by slug
-export async function getTripBySlug(slug: string): Promise<Trip | undefined> {
-  const trips = await getTrips();
-  return trips.find((t) => t.slug === slug);
+export async function getTripBySlug(slug: string): Promise<Trip | null> {
+  const trips = await readTrips();
+  return trips.find((t) => t.slug === slug) ?? null;
+}
+
+export type CreateTripInput = Partial<Trip> & {
+  title: string;
+};
+
+/**
+ * Create a new trip and persist it.
+ */
+export async function createTrip(input: CreateTripInput): Promise<Trip> {
+  const trips = await readTrips();
+
+  const id = (globalThis.crypto ?? require("crypto")).randomUUID();
+  const baseSlug =
+    input.slug ??
+    (input.title || "trip")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+  const slug = `${baseSlug}-${id.slice(0, 6)}`;
+
+  const trip: Trip = {
+    id,
+    slug,
+    title: input.title,
+    location: input.location ?? "",
+    price: typeof input.price === "number" ? input.price : 0,
+    duration: input.duration ?? "",
+    image: input.image ?? "",
+    mealsPerDay:
+      typeof input.mealsPerDay === "number" ? input.mealsPerDay : undefined,
+    startDates: Array.isArray(input.startDates) ? input.startDates : [],
+    description: input.description ?? "",
+    inclusions: input.inclusions ?? "",
+    exclusions: input.exclusions ?? "",
+    itinerary: Array.isArray(input.itinerary) ? input.itinerary : [],
+  };
+
+  // Add newest first
+  trips.unshift(trip);
+  await writeTrips(trips);
+  return trip;
 }
