@@ -11,10 +11,9 @@ type RouteParams = {
 };
 
 export default async function TripDetailPage({
-  // ✅ Next 15: params is a Promise in edge/server contexts — await it
   params,
 }: {
-  params: Promise<RouteParams>;
+  params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
 
