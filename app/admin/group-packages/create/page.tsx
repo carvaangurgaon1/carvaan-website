@@ -9,9 +9,9 @@ export default function CreatePackagePage() {
     tripTitle: "",
     pickupCity: "",
     destinationCity: "",
-    seatsLeft: "",
+    meals: "", // replaced seatsLeft
     duration: "",
-    startDate: "",
+    startDates: [] as string[], // multi-date
     discountPrice: "",
     actualPrice: "",
     captain: "",
@@ -34,20 +34,45 @@ export default function CreatePackagePage() {
     inclusions: "",
     exclusions: "",
     packingGuide: "",
-    itinerary: "",
-    meals: "",
+    itinerary: [{ day: 1, detail: "" }],
     handpicked: "No",
     trending: "No",
     isActive: "Yes",
   });
 
+  // handle general inputs
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // handle multi-date selection
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDates = Array.from(e.target.selectedOptions, (option) => option.value);
+    setFormData((prev) => ({ ...prev, startDates: selectedDates }));
+  };
+
+  // itinerary updates
+  const handleItineraryChange = (index: number, value: string) => {
+    const updated = [...formData.itinerary];
+    updated[index].detail = value;
+    setFormData((prev) => ({ ...prev, itinerary: updated }));
+  };
+
+  const addItineraryDay = () => {
+    setFormData((prev) => ({
+      ...prev,
+      itinerary: [...prev.itinerary, { day: prev.itinerary.length + 1, detail: "" }],
+    }));
+  };
+
+  const removeItineraryDay = (index: number) => {
+    const updated = formData.itinerary.filter((_, i) => i !== index);
+    setFormData((prev) => ({ ...prev, itinerary: updated }));
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevents any unwanted navigation
+    e.preventDefault();
     console.log("Package Created:", formData);
     alert("✅ Package Created Successfully!");
   };
@@ -58,8 +83,6 @@ export default function CreatePackagePage() {
 
       <form
         onSubmit={handleSubmit}
-        action="#"
-        method="post"
         className="grid lg:grid-cols-3 gap-8 bg-white p-6 rounded-xl shadow-md border"
       >
         {/* LEFT SECTION */}
@@ -79,9 +102,38 @@ export default function CreatePackagePage() {
           <div>
             <h2 className="text-lg font-semibold text-purple-600 mb-3">Trip Details</h2>
             <div className="grid md:grid-cols-2 gap-4">
-              <input name="seatsLeft" type="number" placeholder="Seats Left" value={formData.seatsLeft} onChange={handleChange} className="border rounded-md px-4 py-2" />
+              {/* Replaced Seats Left with Meals */}
+              <select name="meals" value={formData.meals} onChange={handleChange} className="border rounded-md px-4 py-2">
+                <option value="">Number of Meals*</option>
+                <option value="1">1 Meal</option>
+                <option value="2">2 Meals</option>
+                <option value="3">3 Meals</option>
+              </select>
+
               <input name="duration" type="number" placeholder="Duration (Days)" value={formData.duration} onChange={handleChange} className="border rounded-md px-4 py-2" />
-              <input name="startDate" type="date" value={formData.startDate} onChange={handleChange} className="border rounded-md px-4 py-2" />
+
+              {/* Multi-date selection */}
+              <label className="col-span-2 text-sm text-gray-600">
+                Select Trip Dates (multi-select with Ctrl/Command)
+                <select
+                  multiple
+                  size={4}
+                  onChange={handleDateChange}
+                  className="border rounded-md px-4 py-2 w-full mt-1"
+                >
+                  {Array.from({ length: 31 }).map((_, i) => {
+                    const d = new Date();
+                    d.setDate(d.getDate() + i);
+                    const dateString = d.toISOString().split("T")[0];
+                    return (
+                      <option key={i} value={dateString}>
+                        {d.toDateString()}
+                      </option>
+                    );
+                  })}
+                </select>
+              </label>
+
               <select name="transportation" value={formData.transportation} onChange={handleChange} className="border rounded-md px-4 py-2">
                 <option value="">Transportation*</option>
                 <option>Bus</option>
@@ -140,39 +192,46 @@ export default function CreatePackagePage() {
             </div>
           </div>
 
-          {/* Section 5 — Description */}
+          {/* Section 5 — Description & Content */}
           <div>
             <h2 className="text-lg font-semibold text-purple-600 mb-3">Description & Content</h2>
-            <textarea
-              name="description"
-              placeholder="Write full package description..."
-              value={(formData as any).description}
-              onChange={handleChange}
-              rows={4}
-              className="border rounded-md w-full px-4 py-2"
-            />
-            <textarea
-              name="inclusions"
-              placeholder="Inclusions"
-              value={formData.inclusions}
-              onChange={handleChange}
-              rows={2}
-              className="border rounded-md w-full px-4 py-2 mt-3"
-            />
-            <textarea
-              name="exclusions"
-              placeholder="Exclusions"
-              value={formData.exclusions}
-              onChange={handleChange}
-              rows={2}
-              className="border rounded-md w-full px-4 py-2 mt-3"
-            />
+            <textarea name="description" placeholder="Write full package description..." value={(formData as any).description} onChange={handleChange} rows={4} className="border rounded-md w-full px-4 py-2" />
+            <textarea name="inclusions" placeholder="Inclusions" value={formData.inclusions} onChange={handleChange} rows={2} className="border rounded-md w-full px-4 py-2 mt-3" />
+            <textarea name="exclusions" placeholder="Exclusions" value={formData.exclusions} onChange={handleChange} rows={2} className="border rounded-md w-full px-4 py-2 mt-3" />
           </div>
 
-          <button
-            type="submit"
-            className="bg-purple-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-purple-700 transition flex items-center gap-2"
-          >
+          {/* ✈️ Section 6 — Trip Itinerary */}
+          <div>
+            <h2 className="text-lg font-semibold text-purple-600 mb-3">Trip Itinerary</h2>
+            {formData.itinerary.map((day, i) => (
+              <div key={i} className="flex gap-2 mb-2 items-start">
+                <span className="font-semibold text-gray-600">Day {day.day}:</span>
+                <textarea
+                  placeholder={`Itinerary for Day ${day.day}`}
+                  value={day.detail}
+                  onChange={(e) => handleItineraryChange(i, e.target.value)}
+                  rows={2}
+                  className="border rounded-md w-full px-4 py-2"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeItineraryDay(i)}
+                  className="text-red-600 font-bold hover:text-red-800"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addItineraryDay}
+              className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            >
+              + Add Day
+            </button>
+          </div>
+
+          <button type="submit" className="bg-purple-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-purple-700 transition flex items-center gap-2">
             <FiSave /> Create Package
           </button>
         </div>
@@ -185,8 +244,8 @@ export default function CreatePackagePage() {
             <p><strong>Destination:</strong> {formData.destinationCity || "—"}</p>
             <p><strong>Duration:</strong> {formData.duration || "—"} Days</p>
             <p><strong>Price:</strong> ₹{formData.discountPrice || "—"} /person</p>
-            <p><strong>Seats Left:</strong> {formData.seatsLeft || "—"}</p>
-            <p><strong>Start Date:</strong> {formData.startDate || "—"}</p>
+            <p><strong>Meals:</strong> {formData.meals || "—"}</p>
+            <p><strong>Trip Dates:</strong> {formData.startDates.join(", ") || "—"}</p>
             <p><strong>Trip Difficulty:</strong> {formData.difficulty || "—"}</p>
           </div>
         </div>
