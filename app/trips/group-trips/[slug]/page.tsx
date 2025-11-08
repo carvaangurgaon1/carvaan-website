@@ -1,3 +1,4 @@
+// app/trips/group-trips/[slug]/page.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -5,11 +6,11 @@ import { getTripBySlug } from "@/lib/blobTrips";
 
 export const dynamic = "force-dynamic";
 
-type PageProps = {
+type SlugPageProps = {
   params: { slug: string };
 };
 
-export default async function TripDetailPage({ params }: PageProps) {
+export default async function TripDetailPage({ params }: SlugPageProps) {
   const { slug } = params;
 
   const trip = await getTripBySlug(slug);
