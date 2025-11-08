@@ -1,14 +1,14 @@
 // app/api/trips/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { listTrips, createTrip } from "@/lib/blobTrips";
+import { listTrips, createTrip } from "@/lib/blobTrips";  // ✅ use correct names
 
-// GET /api/trips  -> list all trips
+// GET /api/trips  → list all trips
 export async function GET() {
   const trips = await listTrips();
   return NextResponse.json({ trips });
 }
 
-// POST /api/trips -> create a new trip
+// POST /api/trips → create a new trip
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
