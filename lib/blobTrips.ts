@@ -5,80 +5,77 @@ export type Trip = {
   id: string;
   slug: string;
   title: string;
-  location?: string;
-  price?: number;
-  duration?: string;         // e.g. "3N/4D"
+  location: string;
+  price: number;
+  duration?: string;
   image?: string;
   description?: string;
-  inclusions?: string;       // newline separated
-  exclusions?: string;       // newline separated
-  mealsPerDay?: number;      // 1 | 2 | 3
-  startDates?: string[];     // ISO date strings
-  itinerary?: Array<{ day: number; title?: string; details?: string }>;
+  inclusions?: string;
+  exclusions?: string;
+  mealsPerDay?: number;
+  startDates?: string[];
+  itinerary?: { day: number; title?: string; details?: string }[];
   createdAt: string;
 };
 
-const STORE_KEY = "data/trips.json";
 const TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
+const FILE_KEY = "trips.json";
 
-/** Load current trips array from Blob (or return empty array) */
-async function readTrips(): Promise<Trip[]> {
-  const { blobs } = await list({
-    prefix: STORE_KEY,
-    token: TOKEN,
-  });
-
-  if (!blobs.length) return [];
-  const res = await fetch(blobs[0].url, { cache: "no-store" });
+// READ
+export async function getTrips(): Promise<Trip[]> {
+  const blobs = await list({ token: TOKEN });
+  const file = blobs.blobs.find((b) => b.pathname === FILE_KEY);
+  if (!file) return [];
+  const res = await fetch(file.url, { cache: "no-store" });
   if (!res.ok) return [];
-  return (await res.json()) as Trip[];
+  const data = (await res.json()) as Trip[] | { trips: Trip[] };
+  return Array.isArray(data) ? data : data.trips ?? [];
 }
 
-/** Save trips array back to Blob (overwrites the same key) */
-async function saveTrips(trips: Trip[]) {
-  await put(STORE_KEY, JSON.stringify(trips, null, 2), {
+// WRITE
+export async function upsertTrips(trips: Trip[]): Promise<void> {
+  await put(FILE_KEY, JSON.stringify(trips, null, 2), {
     access: "public",
-    addRandomSuffix: false,
     contentType: "application/json",
     token: TOKEN,
   });
 }
 
-/** Public API */
-export async function listTrips(): Promise<Trip[]> {
-  return await readTrips();
-}
-
-export async function getTripBySlug(slug: string): Promise<Trip | null> {
-  const trips = await readTrips();
-  return trips.find((t) => t.slug === slug) ?? null;
-}
-
-export async function createTrip(
-  partial: Omit<Partial<Trip>, "id" | "createdAt">
-): Promise<Trip> {
-  const trips = await readTrips();
+// CREATE
+export async function createTrip(input: Partial<Trip>): Promise<Trip> {
+  const now = new Date().toISOString();
+  const title = input.title?.trim() || "Untitled Trip";
+  const slugBase =
+    input.slug ??
+    title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = `${slugBase}-${Date.now().toString(36)}`;
 
   const newTrip: Trip = {
     id: crypto.randomUUID(),
-    slug: String(partial.slug),
-    title: String(partial.title),
-    location: partial.location ?? "",
-    price: partial.price ? Number(partial.price) : 0,
-    duration: partial.duration ?? "",
-    image: partial.image ?? "",
-    description: partial.description ?? "",
-    inclusions: partial.inclusions ?? "",
-    exclusions: partial.exclusions ?? "",
+    slug,
+    title,
+    location: input.location ?? "",
+    price: Number(input.price ?? 0),
+    duration: input.duration,
+    image: input.image,
+    description: input.description,
+    inclusions: input.inclusions,
+    exclusions: input.exclusions,
     mealsPerDay:
-      typeof partial.mealsPerDay === "number" ? partial.mealsPerDay : undefined,
-    startDates: Array.isArray(partial.startDates) ? partial.startDates : [],
-    itinerary: Array.isArray(partial.itinerary) ? partial.itinerary : [],
-    createdAt: new Date().toISOString(),
+      typeof input.mealsPerDay === "number" ? input.mealsPerDay : undefined,
+    startDates: Array.isArray(input.startDates) ? input.startDates : undefined,
+    itinerary: Array.isArray(input.itinerary) ? input.itinerary : undefined,
+    createdAt: now,
   };
 
-  // put newest at the top
+  const trips = await getTrips();
   trips.unshift(newTrip);
-  await saveTrips(trips);
+  await upsertTrips(trips);
   return newTrip;
+}
+
+// READ ONE
+export async function getTripBySlug(slug: string): Promise<Trip | undefined> {
+  const trips = await getTrips();
+  return trips.find((t) => t.slug === slug);
 }
