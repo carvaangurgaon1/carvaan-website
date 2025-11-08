@@ -1,4 +1,3 @@
-// app/trips/group-trips/[slug]/page.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -11,8 +10,9 @@ export default async function TripDetailPage({
 }: {
   params: { slug: string };
 }) {
-  const { slug } = params; // <- NOT a Promise
+  const { slug } = params; // ✅ this is correct — not a Promise
   const trip = await getTripBySlug(slug);
+
   if (!trip) notFound();
 
   return (
