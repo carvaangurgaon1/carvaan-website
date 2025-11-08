@@ -11,7 +11,7 @@ export default async function TripDetailPage({
 }: {
   params: { slug: string };
 }) {
-  const { slug } = params;
+  const { slug } = params; // <- NOT a Promise
   const trip = await getTripBySlug(slug);
   if (!trip) notFound();
 
@@ -68,14 +68,31 @@ export default async function TripDetailPage({
             <div className="p-3 bg-gray-50 rounded-lg">
               <p className="text-gray-500">Active Dates</p>
               <p className="font-semibold">
-                {trip.startDates?.length ? `${trip.startDates.length} dates` : "—"}
+                {Array.isArray(trip.startDates) && trip.startDates.length > 0
+                  ? `${trip.startDates.length} dates`
+                  : "—"}
               </p>
             </div>
+          </div>
+
+          <div className="mt-6 flex gap-3">
+            <a
+              href="#book"
+              className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-2.5 rounded-lg hover:opacity-90 transition"
+            >
+              Book This Trip
+            </a>
+            <a
+              href="#itinerary"
+              className="border border-purple-200 text-purple-700 px-5 py-2.5 rounded-lg hover:bg-purple-50 transition"
+            >
+              View Itinerary
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Overview */}
+      {/* Description */}
       {trip.description && (
         <section className="max-w-6xl mx-auto px-6 py-6">
           <div className="bg-white rounded-2xl shadow p-6">
