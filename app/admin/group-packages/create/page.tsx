@@ -5,17 +5,27 @@ import { FiPlus, FiSave, FiTrash2 } from "react-icons/fi";
 
 type ItineraryDay = { day: number; title?: string; details?: string };
 
+// --- helper to build a unique, URL-safe slug ---
+function slugify(input: string) {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
 export default function CreatePackagePage() {
   const [form, setForm] = useState({
     companyName: "",
     tripTitle: "",
     pickupCity: "",
     destinationCity: "",
-    duration: "",           // e.g. "3N/4D"
-    price: "",              // number as string
+    duration: "", // e.g. "3N/4D"
+    price: "", // number as string
     image: "",
-    mealsPerDay: "1",       // dropdown 1/2/3
-    startDateInput: "",     // for date entry
+    mealsPerDay: "1", // dropdown 1/2/3
+    startDateInput: "", // for date entry
     startDates: [] as string[], // all chosen dates
     description: "",
     inclusions: "",
@@ -28,9 +38,12 @@ export default function CreatePackagePage() {
   });
 
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
+  const [submitting, setSubmitting] = useState(false);
 
   const onChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
   };
@@ -60,11 +73,7 @@ export default function CreatePackagePage() {
     setItinerary((p) => [...p, { day: dayNum, title: "", details: "" }]);
   };
 
-  const updateDay = (
-    idx: number,
-    field: "title" | "details",
-    value: string
-  ) => {
+  const updateDay = (idx: number, field: "title" | "details", value: string) => {
     setItinerary((p) =>
       p.map((d, i) => (i === idx ? { ...d, [field]: value } : d))
     );
@@ -79,43 +88,59 @@ export default function CreatePackagePage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // basic validation
     if (!form.tripTitle || !form.destinationCity) {
       alert("Trip Title and Destination City are required.");
       return;
     }
 
+    setSubmitting(true);
+
+    // Build a unique slug from title
+    const base = slugify(form.tripTitle);
+    const slug = `${base}-${Date.now().toString(36)}`;
+
+    // Map UI state -> API payload (what /api/trips expects)
     const payload = {
-      title: form.tripTitle,
+      slug, // REQUIRED by the API
+      title: form.tripTitle, // REQUIRED by the API
       location: form.destinationCity,
       duration: form.duration,
       price: Number(form.price) || 0,
       image: form.image,
-      mealsPerDay: Number(form.mealsPerDay),
-      startDates: form.startDates,              // array of ISO yyyy-mm-dd
+      mealsPerDay: Number(form.mealsPerDay) || 1,
+      startDates: form.startDates, // ISO yyyy-mm-dd[]
       description: form.description,
       inclusions: form.inclusions,
       exclusions: form.exclusions,
-      itinerary,
+      itinerary, // [{day,title,details}]
     };
 
-    const res = await fetch("/api/trips", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await fetch("/api/trips", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      console.error("Create trip failed:", err);
-      alert("Failed to create trip.");
-      return;
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        console.error("Create trip failed:", data);
+        alert(`Failed to create trip: ${data?.error || res.statusText}`);
+        setSubmitting(false);
+        return;
+      }
+
+      alert("✅ Trip created!");
+
+      // OPTIONAL: auto navigate to the newly created trip detail page
+      // window.location.href = `/trips/group-trips/${slug}`;
+      setSubmitting(false);
+    } catch (err: any) {
+      console.error(err);
+      alert("Failed to create trip. Network or server error.");
+      setSubmitting(false);
     }
-
-    const created = await res.json();
-    alert("✅ Trip created!");
-    // optional: redirect to the trip detail page
-    // window.location.href = `/trips/group-trips/${created.slug}`;
   };
 
   return (
@@ -232,7 +257,7 @@ export default function CreatePackagePage() {
                 </button>
               </div>
 
-              {/* Pills of selected dates */}
+              {/* Selected date chips */}
               {form.startDates.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
                   {form.startDates.map((d) => (
@@ -349,23 +374,40 @@ export default function CreatePackagePage() {
 
           <button
             type="submit"
-            className="bg-purple-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-purple-700 transition flex items-center gap-2"
+            disabled={submitting}
+            className="bg-purple-600 disabled:opacity-60 text-white font-semibold px-6 py-3 rounded-md hover:bg-purple-700 transition flex items-center gap-2"
           >
-            <FiSave /> Create Package
+            <FiSave /> {submitting ? "Creating…" : "Create Package"}
           </button>
         </div>
 
         {/* RIGHT — Live Preview */}
         <aside className="bg-gray-50 border rounded-lg p-4 h-fit">
-          <h2 className="text-lg font-semibold text-gray-700 mb-3">🪄 Live Preview</h2>
+          <h2 className="text-lg font-semibold text-gray-700 mb-3">
+            🪄 Live Preview
+          </h2>
           <div className="space-y-2 text-sm text-gray-700">
-            <p><strong>Trip Title:</strong> {form.tripTitle || "—"}</p>
-            <p><strong>Destination:</strong> {form.destinationCity || "—"}</p>
-            <p><strong>Duration:</strong> {form.duration || "—"}</p>
-            <p><strong>Price:</strong> ₹{form.price || "—"} /person</p>
-            <p><strong>Meals / Day:</strong> {form.mealsPerDay}</p>
-            <p><strong>Dates:</strong> {form.startDates.length}</p>
-            <p><strong>Itinerary Days:</strong> {itinerary.length}</p>
+            <p>
+              <strong>Trip Title:</strong> {form.tripTitle || "—"}
+            </p>
+            <p>
+              <strong>Destination:</strong> {form.destinationCity || "—"}
+            </p>
+            <p>
+              <strong>Duration:</strong> {form.duration || "—"}
+            </p>
+            <p>
+              <strong>Price:</strong> ₹{form.price || "—"} /person
+            </p>
+            <p>
+              <strong>Meals / Day:</strong> {form.mealsPerDay}
+            </p>
+            <p>
+              <strong>Dates:</strong> {form.startDates.length}
+            </p>
+            <p>
+              <strong>Itinerary Days:</strong> {itinerary.length}
+            </p>
           </div>
         </aside>
       </form>
