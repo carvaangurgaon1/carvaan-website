@@ -21,7 +21,7 @@ export type Trip = {
 const TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
 const FILE_KEY = "trips.json";
 
-// READ
+/** READ all trips */
 export async function getTrips(): Promise<Trip[]> {
   const blobs = await list({ token: TOKEN });
   const file = blobs.blobs.find((b) => b.pathname === FILE_KEY);
@@ -32,7 +32,7 @@ export async function getTrips(): Promise<Trip[]> {
   return Array.isArray(data) ? data : data.trips ?? [];
 }
 
-// WRITE
+/** WRITE full list */
 export async function upsertTrips(trips: Trip[]): Promise<void> {
   await put(FILE_KEY, JSON.stringify(trips, null, 2), {
     access: "public",
@@ -41,10 +41,10 @@ export async function upsertTrips(trips: Trip[]): Promise<void> {
   });
 }
 
-// CREATE
+/** CREATE one trip */
 export async function createTrip(input: Partial<Trip>): Promise<Trip> {
   const now = new Date().toISOString();
-  const title = input.title?.trim() || "Untitled Trip";
+  const title = (input.title ?? "Untitled Trip").toString().trim();
   const slugBase =
     input.slug ??
     title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -74,7 +74,7 @@ export async function createTrip(input: Partial<Trip>): Promise<Trip> {
   return newTrip;
 }
 
-// READ ONE
+/** READ one by slug */
 export async function getTripBySlug(slug: string): Promise<Trip | undefined> {
   const trips = await getTrips();
   return trips.find((t) => t.slug === slug);
