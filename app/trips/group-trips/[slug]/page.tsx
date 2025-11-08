@@ -4,15 +4,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTripBySlug } from "@/lib/blobTrips";
 
+// Keep this dynamic to avoid SSG typing quirks
 export const dynamic = "force-dynamic";
 
-// ✅ Inline the type to avoid clashing with Next's generated PageProps
-export default async function TripDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const { slug } = params;
+// ✅ IMPORTANT: no PageProps import and no strict param typing
+export default async function TripDetailPage({ params }: any) {
+  // Some Next type generators think params is a Promise; handle both shapes.
+  const resolvedParams = typeof params?.then === "function" ? await params : params;
+  const slug: string = resolvedParams?.slug;
+
+  if (!slug) notFound();
 
   const trip = await getTripBySlug(slug);
   if (!trip) notFound();
@@ -113,7 +114,7 @@ export default async function TripDetailPage({
             <div className="bg-white rounded-2xl shadow p-6">
               <h3 className="text-lg font-semibold mb-2">Inclusions</h3>
               <ul className="list-disc pl-5 space-y-1 text-gray-700 whitespace-pre-wrap">
-                {trip.inclusions.split("\n").map((line, i) => (
+                {trip.inclusions.split("\n").map((line: string, i: number) => (
                   <li key={i}>{line}</li>
                 ))}
               </ul>
@@ -123,7 +124,7 @@ export default async function TripDetailPage({
             <div className="bg-white rounded-2xl shadow p-6">
               <h3 className="text-lg font-semibold mb-2">Exclusions</h3>
               <ul className="list-disc pl-5 space-y-1 text-gray-700 whitespace-pre-wrap">
-                {trip.exclusions.split("\n").map((line, i) => (
+                {trip.exclusions.split("\n").map((line: string, i: number) => (
                   <li key={i}>{line}</li>
                 ))}
               </ul>
@@ -138,19 +139,27 @@ export default async function TripDetailPage({
           <div className="bg-white rounded-2xl shadow p-6">
             <h2 className="text-xl font-semibold mb-4">Itinerary</h2>
             <ol className="space-y-4">
-              {trip.itinerary.map((day, idx) => (
-                <li key={idx} className="border-l-4 border-purple-300 pl-4 py-1">
-                  <p className="font-semibold">
-                    Day {day.day}
-                    {day.title ? ` — ${day.title}` : ""}
-                  </p>
-                  {day.details && (
-                    <p className="text-gray-700 mt-1 whitespace-pre-wrap">
-                      {day.details}
+              {trip.itinerary.map(
+                (
+                  day: { day: number; title?: string; details?: string },
+                  idx: number
+                ) => (
+                  <li
+                    key={idx}
+                    className="border-l-4 border-purple-300 pl-4 py-1"
+                  >
+                    <p className="font-semibold">
+                      Day {day.day}
+                      {day.title ? ` — ${day.title}` : ""}
                     </p>
-                  )}
-                </li>
-              ))}
+                    {day.details && (
+                      <p className="text-gray-700 mt-1 whitespace-pre-wrap">
+                        {day.details}
+                      </p>
+                    )}
+                  </li>
+                )
+              )}
             </ol>
           </div>
         </section>
@@ -162,7 +171,7 @@ export default async function TripDetailPage({
           <div className="bg-white rounded-2xl shadow p-6">
             <h2 className="text-xl font-semibold mb-4">Select a Start Date</h2>
             <div className="flex flex-wrap gap-3">
-              {trip.startDates.map((d, i) => (
+              {trip.startDates.map((d: string, i: number) => (
                 <button
                   key={i}
                   className="px-4 py-2 rounded-lg border hover:bg-purple-50"
