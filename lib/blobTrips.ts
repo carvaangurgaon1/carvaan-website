@@ -18,21 +18,21 @@ export type Trip = {
   createdAt: string;
 };
 
-const TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
+const TOKEN = process.env.BLOB_READ_WRITE_TOKEN!;
 const FILE_KEY = "trips.json";
 
-/** READ all trips */
+/** Get all trips */
 export async function getTrips(): Promise<Trip[]> {
   const blobs = await list({ token: TOKEN });
   const file = blobs.blobs.find((b) => b.pathname === FILE_KEY);
   if (!file) return [];
   const res = await fetch(file.url, { cache: "no-store" });
   if (!res.ok) return [];
-  const data = (await res.json()) as Trip[] | { trips: Trip[] };
+  const data = await res.json();
   return Array.isArray(data) ? data : data.trips ?? [];
 }
 
-/** WRITE full list */
+/** Save all trips */
 export async function upsertTrips(trips: Trip[]): Promise<void> {
   await put(FILE_KEY, JSON.stringify(trips, null, 2), {
     access: "public",
@@ -41,40 +41,38 @@ export async function upsertTrips(trips: Trip[]): Promise<void> {
   });
 }
 
-/** CREATE one trip */
+/** Create a new trip */
 export async function createTrip(input: Partial<Trip>): Promise<Trip> {
   const now = new Date().toISOString();
-  const title = (input.title ?? "Untitled Trip").toString().trim();
-  const slugBase =
-    input.slug ??
-    title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const title = input.title?.trim() || "Untitled Trip";
+  const slugBase = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const slug = `${slugBase}-${Date.now().toString(36)}`;
 
   const newTrip: Trip = {
     id: crypto.randomUUID(),
     slug,
     title,
-    location: input.location ?? "",
-    price: Number(input.price ?? 0),
+    location: input.location || "",
+    price: Number(input.price || 0),
     duration: input.duration,
     image: input.image,
     description: input.description,
     inclusions: input.inclusions,
     exclusions: input.exclusions,
-    mealsPerDay:
-      typeof input.mealsPerDay === "number" ? input.mealsPerDay : undefined,
-    startDates: Array.isArray(input.startDates) ? input.startDates : undefined,
-    itinerary: Array.isArray(input.itinerary) ? input.itinerary : undefined,
+    mealsPerDay: input.mealsPerDay,
+    startDates: input.startDates,
+    itinerary: input.itinerary,
     createdAt: now,
   };
 
   const trips = await getTrips();
   trips.unshift(newTrip);
   await upsertTrips(trips);
+
   return newTrip;
 }
 
-/** READ one by slug */
+/** Get trip by slug */
 export async function getTripBySlug(slug: string): Promise<Trip | undefined> {
   const trips = await getTrips();
   return trips.find((t) => t.slug === slug);
