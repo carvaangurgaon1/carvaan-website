@@ -2,19 +2,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-type Trip = {
-  id: string;
-  slug: string;
-  title: string;
-  location: string;
-  category?: string;
-  price: number;
-  durationLabel: string;
-  image: string;
-};
-
 export default function GroupTripsPage() {
-  const [allTrips, setAllTrips] = useState<Trip[]>([]);
+  const [allTrips, setAllTrips] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [budget, setBudget] = useState("");
@@ -24,7 +13,7 @@ export default function GroupTripsPage() {
     (async () => {
       const res = await fetch("/api/trips", { cache: "no-store" });
       const data = await res.json();
-      setAllTrips(data);
+      setAllTrips(data || []);
     })();
   }, []);
 
@@ -44,15 +33,23 @@ export default function GroupTripsPage() {
   });
 
   const clearFilters = () => {
-    setSearch(""); setCategory(""); setBudget(""); setDuration("");
+    setSearch("");
+    setCategory("");
+    setBudget("");
+    setDuration("");
   };
 
   return (
     <main className="min-h-screen bg-gray-50 pb-16">
       <section className="text-center py-12 bg-gradient-to-r from-pink-50 to-purple-50 mb-8">
         <h1 className="text-4xl font-bold text-purple-700 mb-2">All Group Trips 🚐✨</h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">Find your next adventure — filter by location, budget, or vibe.</p>
-        <Link href="/trips" className="inline-block mt-6 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition">
+        <p className="text-gray-600 max-w-2xl mx-auto">
+          Find your next adventure — filter by location, budget, or vibe.
+        </p>
+        <Link
+          href="/trips"
+          className="inline-block mt-6 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
+        >
           ← Back to Trips
         </Link>
       </section>
@@ -66,7 +63,6 @@ export default function GroupTripsPage() {
             onChange={(e) => setSearch(e.target.value)}
             className="border border-gray-300 rounded-md px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-pink-400"
           />
-
           <select value={category} onChange={(e) => setCategory(e.target.value)} className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-400">
             <option value="">All Categories</option>
             <option value="Adventure">Adventure</option>
@@ -75,22 +71,18 @@ export default function GroupTripsPage() {
             <option value="Trek">Trek</option>
             <option value="Nature">Nature</option>
           </select>
-
           <select value={duration} onChange={(e) => setDuration(e.target.value)} className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-400">
             <option value="">All Durations</option>
             <option value="2N/3D">2N/3D</option>
             <option value="3N/4D">3N/4D</option>
             <option value="4N/5D">4N/5D</option>
-            {/* add more if you use them */}
           </select>
-
           <select value={budget} onChange={(e) => setBudget(e.target.value)} className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-400">
             <option value="">All Budgets</option>
             <option value="low">Below ₹10,000</option>
             <option value="mid">₹10,000 – ₹15,000</option>
             <option value="high">Above ₹15,000</option>
           </select>
-
           <button onClick={clearFilters} className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 transition">Clear Filters</button>
         </div>
       </div>
