@@ -1,3 +1,4 @@
+cat > lib/blobTrips.ts <<'TS'
 // lib/blobTrips.ts
 import { put, list } from "@vercel/blob";
 
@@ -8,7 +9,7 @@ export type Trip = {
   slug: string;
   title: string;
   location?: string;
-  duration?: string;      // e.g. "3N/4D"
+  duration?: string;      // "3N/4D"
   price?: number;         // per person
   image?: string;
   mealsPerDay?: number;   // 1 | 2 | 3
@@ -17,23 +18,16 @@ export type Trip = {
   inclusions?: string;
   exclusions?: string;
   itinerary?: ItineraryDay[];
-  createdAt: string;      // ISO
-  updatedAt: string;      // ISO
+  createdAt: string;
+  updatedAt: string;
 };
 
 function slugify(s: string) {
-  return s
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)+/g, "");
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 }
 
 const PREFIX = "trips/";
 
-/**
- * Write a trip to Vercel Blob as public JSON.
- * Returns the saved trip (with id/slug timestamps) and the blob URL.
- */
 export async function createTrip(input: Partial<Trip>): Promise<Trip> {
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     throw new Error("Missing BLOB_READ_WRITE_TOKEN");
@@ -63,7 +57,6 @@ export async function createTrip(input: Partial<Trip>): Promise<Trip> {
   };
 
   const pathname = `${PREFIX}${slug}.json`;
-
   await put(pathname, JSON.stringify(trip), {
     access: "public",
     contentType: "application/json",
@@ -73,7 +66,6 @@ export async function createTrip(input: Partial<Trip>): Promise<Trip> {
   return trip;
 }
 
-/** Read all trips (fast enough for small lists). */
 export async function getTrips(): Promise<Trip[]> {
   const res = await list({ prefix: PREFIX });
   const trips: Trip[] = [];
@@ -82,12 +74,10 @@ export async function getTrips(): Promise<Trip[]> {
     const t = (await r.json()) as Trip;
     trips.push(t);
   }
-  // newest first
   trips.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
   return trips;
 }
 
-/** Read one trip by slug. */
 export async function getTripBySlug(slug: string): Promise<Trip | null> {
   const res = await list({ prefix: PREFIX });
   const blob = res.blobs.find((b) => b.pathname === `${PREFIX}${slug}.json`);
@@ -95,3 +85,4 @@ export async function getTripBySlug(slug: string): Promise<Trip | null> {
   const r = await fetch(blob.url, { cache: "no-store" });
   return (await r.json()) as Trip;
 }
+TS
