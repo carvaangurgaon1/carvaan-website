@@ -10,10 +10,11 @@ type TripDetailProps = {
   params: { slug: string };
 };
 
-export default async function TripDetailPage({ params }: TripDetailProps) {
-  const slug = params.slug;
-  const trip = await getTripBySlug(slug);
-  if (!trip) notFound();
+export default async function TripDetailPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
 
   return (
     <main className="min-h-screen bg-gray-50">
