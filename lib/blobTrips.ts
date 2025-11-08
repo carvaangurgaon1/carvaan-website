@@ -1,7 +1,7 @@
 // lib/blobTrips.ts
 import { put, list } from "@vercel/blob";
 
-export type Trip = {
+export interface Trip {
   id: string;
   slug: string;
   title: string;
@@ -16,12 +16,12 @@ export type Trip = {
   startDates?: string[];
   itinerary?: { day: number; title?: string; details?: string }[];
   createdAt: string;
-};
+}
 
 const TOKEN = process.env.BLOB_READ_WRITE_TOKEN!;
 const FILE_KEY = "trips.json";
 
-/** Read all trips from Blob */
+/** Get all trips stored in the Blob */
 export async function getTrips(): Promise<Trip[]> {
   const blobs = await list({ token: TOKEN });
   const file = blobs.blobs.find((b) => b.pathname === FILE_KEY);
@@ -32,7 +32,7 @@ export async function getTrips(): Promise<Trip[]> {
   return Array.isArray(data) ? data : data.trips ?? [];
 }
 
-/** Overwrite trips.json in Blob */
+/** Overwrite Blob data with updated trips */
 export async function upsertTrips(trips: Trip[]): Promise<void> {
   await put(FILE_KEY, JSON.stringify(trips, null, 2), {
     access: "public",
@@ -41,7 +41,7 @@ export async function upsertTrips(trips: Trip[]): Promise<void> {
   });
 }
 
-/** Create a single trip and persist */
+/** Add a new trip entry */
 export async function createTrip(input: Partial<Trip>): Promise<Trip> {
   const now = new Date().toISOString();
   const title = (input.title || "Untitled Trip").trim();
@@ -71,7 +71,7 @@ export async function createTrip(input: Partial<Trip>): Promise<Trip> {
   return newTrip;
 }
 
-/** Read one trip */
+/** Retrieve a single trip by slug */
 export async function getTripBySlug(slug: string): Promise<Trip | undefined> {
   const trips = await getTrips();
   return trips.find((t) => t.slug === slug);
