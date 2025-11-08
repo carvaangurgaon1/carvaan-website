@@ -1,3 +1,4 @@
+cat > app/trips/group-trips/[slug]/page.tsx <<'TS'
 // app/trips/group-trips/[slug]/page.tsx
 import Image from "next/image";
 import Link from "next/link";
@@ -46,9 +47,7 @@ export default async function TripDetailPage({ params }: PageProps) {
             </div>
             <div className="p-3 bg-gray-50 rounded-lg">
               <p className="text-gray-500">Meals / Day</p>
-              <p className="font-semibold">
-                {trip.mealsPerDay ? `${trip.mealsPerDay} meals` : "—"}
-              </p>
+              <p className="font-semibold">{trip.mealsPerDay ? `${trip.mealsPerDay} meals` : "—"}</p>
             </div>
             <div className="p-3 bg-gray-50 rounded-lg">
               <p className="text-gray-500">Price / Person</p>
@@ -57,9 +56,7 @@ export default async function TripDetailPage({ params }: PageProps) {
             <div className="p-3 bg-gray-50 rounded-lg">
               <p className="text-gray-500">Active Dates</p>
               <p className="font-semibold">
-                {Array.isArray(trip.startDates) && trip.startDates.length > 0
-                  ? `${trip.startDates.length} dates`
-                  : "—"}
+                {Array.isArray(trip.startDates) && trip.startDates.length > 0 ? `${trip.startDates.length} dates` : "—"}
               </p>
             </div>
           </div>
@@ -112,9 +109,7 @@ export default async function TripDetailPage({ params }: PageProps) {
             <ol className="space-y-4">
               {trip.itinerary.map((day, idx) => (
                 <li key={idx} className="border-l-4 border-purple-300 pl-4 py-1">
-                  <p className="font-semibold">
-                    Day {day.day}{day.title ? ` — ${day.title}` : ""}
-                  </p>
+                  <p className="font-semibold">Day {day.day}{day.title ? ` — ${day.title}` : ""}</p>
                   {day.details && <p className="text-gray-700 mt-1 whitespace-pre-wrap">{day.details}</p>}
                 </li>
               ))}
@@ -140,3 +135,4 @@ export default async function TripDetailPage({ params }: PageProps) {
     </main>
   );
 }
+TS
