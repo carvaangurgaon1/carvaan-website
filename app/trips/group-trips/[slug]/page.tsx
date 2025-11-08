@@ -6,12 +6,13 @@ import { getTripBySlug } from "@/lib/blobTrips";
 
 export const dynamic = "force-dynamic";
 
-type SlugPageProps = {
-  params: { slug: string };
-};
-
-export default async function TripDetailPage({ params }: SlugPageProps) {
-  const { slug } = params;
+// 👇 Important: params is a Promise (Next.js 15 quirk)
+export default async function TripDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
 
   const trip = await getTripBySlug(slug);
   if (!trip) {
@@ -47,7 +48,9 @@ export default async function TripDetailPage({ params }: SlugPageProps) {
         </div>
 
         <div className="bg-white rounded-2xl shadow p-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{trip.title}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+            {trip.title}
+          </h1>
           <p className="text-gray-600 mt-2">{trip.location}</p>
 
           <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
@@ -64,7 +67,9 @@ export default async function TripDetailPage({ params }: SlugPageProps) {
             <div className="p-3 bg-gray-50 rounded-lg">
               <p className="text-gray-500">Price / Person</p>
               <p className="font-semibold">
-                {typeof trip.price === "number" ? `₹${trip.price.toLocaleString()}` : "—"}
+                {typeof trip.price === "number"
+                  ? `₹${trip.price.toLocaleString()}`
+                  : "—"}
               </p>
             </div>
             <div className="p-3 bg-gray-50 rounded-lg">
@@ -99,7 +104,9 @@ export default async function TripDetailPage({ params }: SlugPageProps) {
         <section className="max-w-6xl mx-auto px-6 py-6">
           <div className="bg-white rounded-2xl shadow p-6">
             <h2 className="text-xl font-semibold mb-3">Overview</h2>
-            <p className="text-gray-700 leading-7 whitespace-pre-wrap">{trip.description}</p>
+            <p className="text-gray-700 leading-7 whitespace-pre-wrap">
+              {trip.description}
+            </p>
           </div>
         </section>
       )}
@@ -137,14 +144,22 @@ export default async function TripDetailPage({ params }: SlugPageProps) {
             <h2 className="text-xl font-semibold mb-4">Itinerary</h2>
             <ol className="space-y-4">
               {trip.itinerary.map(
-                (day: { day: number; title?: string; details?: string }, idx: number) => (
-                  <li key={idx} className="border-l-4 border-purple-300 pl-4 py-1">
+                (
+                  day: { day: number; title?: string; details?: string },
+                  idx: number
+                ) => (
+                  <li
+                    key={idx}
+                    className="border-l-4 border-purple-300 pl-4 py-1"
+                  >
                     <p className="font-semibold">
                       Day {day.day}
                       {day.title ? ` — ${day.title}` : ""}
                     </p>
                     {day.details && (
-                      <p className="text-gray-700 mt-1 whitespace-pre-wrap">{day.details}</p>
+                      <p className="text-gray-700 mt-1 whitespace-pre-wrap">
+                        {day.details}
+                      </p>
                     )}
                   </li>
                 )
@@ -161,7 +176,10 @@ export default async function TripDetailPage({ params }: SlugPageProps) {
             <h2 className="text-xl font-semibold mb-4">Select a Start Date</h2>
             <div className="flex flex-wrap gap-3">
               {trip.startDates.map((d: string, i: number) => (
-                <button key={i} className="px-4 py-2 rounded-lg border hover:bg-purple-50">
+                <button
+                  key={i}
+                  className="px-4 py-2 rounded-lg border hover:bg-purple-50"
+                >
                   {new Date(d).toLocaleDateString("en-IN", {
                     day: "2-digit",
                     month: "short",
