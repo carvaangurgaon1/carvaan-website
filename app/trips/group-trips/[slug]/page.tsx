@@ -4,22 +4,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTripBySlug } from "@/lib/blobTrips";
 
-// Avoid prerendering issues; keep this dynamic
 export const dynamic = "force-dynamic";
 
-export default async function TripDetailPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params; // 🔑 Next 15 passes params as a Promise
+export default async function TripDetailPage(props: any) {
+  // Support environments where Next types `params` as a Promise
+  const resolved = props?.params?.then ? await props.params : props.params;
+  const slug: string = resolved?.slug;
 
-  // Fetch the trip by slug
   const trip = await getTripBySlug(slug);
-
-  if (!trip) {
-    notFound();
-  }
+  if (!trip) notFound();
 
   return (
     <main className="min-h-screen bg-gray-50">
