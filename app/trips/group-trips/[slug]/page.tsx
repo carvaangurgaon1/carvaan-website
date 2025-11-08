@@ -1,3 +1,4 @@
+// app/trips/group-trips/[slug]/page.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -5,15 +6,17 @@ import { getTripBySlug } from "@/lib/blobTrips";
 
 export const dynamic = "force-dynamic";
 
-export default async function TripDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const { slug } = params; // ✅ this is correct — not a Promise
-  const trip = await getTripBySlug(slug);
+type PageProps = {
+  params: { slug: string }; // ✅ plain object, NOT a Promise
+};
 
-  if (!trip) notFound();
+export default async function TripDetailPage({ params }: PageProps) {
+  const { slug } = params;
+
+  const trip = await getTripBySlug(slug);
+  if (!trip) {
+    notFound();
+  }
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -161,7 +164,10 @@ export default async function TripDetailPage({
             <h2 className="text-xl font-semibold mb-4">Select a Start Date</h2>
             <div className="flex flex-wrap gap-3">
               {trip.startDates.map((d, i) => (
-                <button key={i} className="px-4 py-2 rounded-lg border hover:bg-purple-50">
+                <button
+                  key={i}
+                  className="px-4 py-2 rounded-lg border hover:bg-purple-50"
+                >
                   {new Date(d).toLocaleDateString("en-IN", {
                     day: "2-digit",
                     month: "short",
