@@ -13,7 +13,6 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    // minimal validation
     if (!body?.title || !body?.slug) {
       return NextResponse.json(
         { error: "Missing required fields: title, slug" },
@@ -23,9 +22,9 @@ export async function POST(req: NextRequest) {
 
     const saved = await createTrip(body);
     return NextResponse.json(saved, { status: 201 });
-  } catch (e: any) {
+  } catch (error: any) {
     return NextResponse.json(
-      { error: e?.message || "Failed to create trip" },
+      { error: error?.message || "Failed to create trip" },
       { status: 500 }
     );
   }
