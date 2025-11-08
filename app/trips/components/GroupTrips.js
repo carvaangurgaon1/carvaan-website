@@ -1,32 +1,33 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function GroupTripsSection() {
-  const [trips, setTrips] = useState([]);   // ← no TS generics in .js
+  const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let alive = true;
     (async () => {
       try {
         const res = await fetch("/api/trips", { cache: "no-store" });
         const data = await res.json();
-        if (alive) setTrips(Array.isArray(data) ? data : []);
+        setTrips(Array.isArray(data) ? data.slice(0, 3) : []); // show 3 previews
       } catch (e) {
         console.error(e);
       } finally {
-        if (alive) setLoading(false);
+        setLoading(false);
       }
     })();
-    return () => {
-      alive = false;
-    };
   }, []);
 
-  const top3 = trips.slice(0, 3);
+  if (loading) {
+    return (
+      <section className="py-16 text-center">
+        <p className="text-gray-500">Loading trips…</p>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 bg-white text-center">
@@ -37,55 +38,41 @@ export default function GroupTripsSection() {
         Join handpicked community trips — make new friends, explore destinations, and travel the Carvaan way.
       </p>
 
-      {loading ? (
-        <p className="text-gray-500">Loading trips…</p>
-      ) : top3.length === 0 ? (
-        <p className="text-gray-500">No trips yet — create one from the Admin.</p>
-      ) : (
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8 px-4">
-          {top3.map((trip) => (
-            <div
-              key={trip.slug}
-              className="bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl transition overflow-hidden"
-            >
-              <div className="relative w-full h-52">
-                <Image
-                  src={trip.image || "https://placehold.co/600x400?text=Trip"}
-                  alt={trip.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
+      <div className="max-w-6xl mx-auto grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8 px-4">
+        {trips.map((trip) => (
+          <div key={trip.id} className="bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl transition overflow-hidden">
+            <div className="relative w-full h-52">
+              <Image
+                src={trip.image || "https://placehold.co/800x500?text=Trip"}
+                alt={trip.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+            </div>
 
-              <div className="p-5 text-left">
-                <h3 className="text-xl font-semibold text-gray-800 mb-1">
-                  {trip.title}
-                </h3>
-                <p className="text-gray-500">{trip.location}</p>
-                {typeof trip.price === "number" && (
-                  <>
-                    <p className="text-purple-700 font-bold mt-2">
-                      ₹{trip.price.toLocaleString()}
-                    </p>
-                    {trip.duration && (
-                      <p className="text-sm text-gray-500">{trip.duration}</p>
-                    )}
-                  </>
-                )}
+            <div className="p-5 text-left">
+              <h3 className="text-xl font-semibold text-gray-800 mb-1">
+                {trip.title}
+              </h3>
+              <p className="text-gray-500">{trip.location}</p>
+              {typeof trip.price === "number" && (
+                <p className="text-purple-700 font-bold mt-2">₹{trip.price.toLocaleString()}</p>
+              )}
+              <p className="text-sm text-gray-500">{trip.duration}</p>
 
-                <div className="mt-4">
-                  <Link
-                    href={`/trips/group-trips/${trip.slug}`}
-                    className="inline-block bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-md hover:opacity-90 transition"
-                  >
-                    View Details
-                  </Link>
-                </div>
+              <div className="mt-4">
+                <Link
+                  href={`/trips/group-trips/${trip.slug}`}
+                  className="inline-block bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-md hover:opacity-90 transition"
+                >
+                  View Details
+                </Link>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
 
       <div className="mt-12">
         <Link
