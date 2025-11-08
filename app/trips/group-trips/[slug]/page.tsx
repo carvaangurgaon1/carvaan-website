@@ -7,7 +7,7 @@ import { getTripBySlug } from "@/lib/blobTrips";
 export const dynamic = "force-dynamic";
 
 export default async function TripDetailPage(props: any) {
-  // Support environments where Next types `params` as a Promise
+  // Some Next 15 types pass Promise for params; handle both
   const resolved = props?.params?.then ? await props.params : props.params;
   const slug: string = resolved?.slug;
 
