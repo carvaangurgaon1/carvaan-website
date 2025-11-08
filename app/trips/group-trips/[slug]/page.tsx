@@ -1,30 +1,23 @@
+// app/trips/group-trips/[slug]/page.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTripBySlug } from "@/lib/blobTrips";
 
-// If you want to avoid prerendering issues, keep this dynamic:
+// Avoid prerendering issues; keep this dynamic
 export const dynamic = "force-dynamic";
-
-type RouteParams = {
-  slug: string;
-};
 
 export default async function TripDetailPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params; // 👈 this line is key
+  const { slug } = await params; // 🔑 Next 15 passes params as a Promise
 
-  // ...rest of your component stays the same
-}
-
+  // Fetch the trip by slug
   const trip = await getTripBySlug(slug);
 
   if (!trip) {
-    // optional: log for debugging
-    // console.warn(`Trip not found for slug: ${slug}`);
     notFound();
   }
 
@@ -74,7 +67,9 @@ export default async function TripDetailPage({
             </div>
             <div className="p-3 bg-gray-50 rounded-lg">
               <p className="text-gray-500">Price / Person</p>
-              <p className="font-semibold">₹{Number(trip.price || 0).toLocaleString()}</p>
+              <p className="font-semibold">
+                ₹{Number(trip.price || 0).toLocaleString()}
+              </p>
             </div>
             <div className="p-3 bg-gray-50 rounded-lg">
               <p className="text-gray-500">Active Dates</p>
