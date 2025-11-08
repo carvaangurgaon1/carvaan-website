@@ -1,10 +1,11 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function GroupTripsSection() {
-  const [trips, setTrips] = useState<any[]>([]);
+  const [trips, setTrips] = useState([]);   // ← no TS generics in .js
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +37,6 @@ export default function GroupTripsSection() {
         Join handpicked community trips — make new friends, explore destinations, and travel the Carvaan way.
       </p>
 
-      {/* Loading / Empty */}
       {loading ? (
         <p className="text-gray-500">Loading trips…</p>
       ) : top3.length === 0 ? (
