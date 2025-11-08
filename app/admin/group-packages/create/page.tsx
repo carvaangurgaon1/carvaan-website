@@ -86,62 +86,60 @@ export default function CreatePackagePage() {
   };
 
   const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!form.tripTitle || !form.destinationCity) {
-      alert("Trip Title and Destination City are required.");
+  if (!form.tripTitle || !form.destinationCity) {
+    alert("Trip Title and Destination City are required.");
+    return;
+  }
+
+  setSubmitting(true);
+
+  // Build a unique slug from title (same helper as before)
+  const base = slugify(form.tripTitle);
+  const slug = `${base}-${Date.now().toString(36)}`;
+
+  const payload = {
+    slug,                               // <— ensure API gets slug
+    title: form.tripTitle,              // <— ensure API gets title
+    location: form.destinationCity,
+    duration: form.duration,
+    price: Number(form.price) || 0,
+    image: form.image,
+    mealsPerDay: Number(form.mealsPerDay) || 1,
+    startDates: form.startDates,
+    description: form.description,
+    inclusions: form.inclusions,
+    exclusions: form.exclusions,
+    itinerary,
+  };
+
+  try {
+    const res = await fetch("/api/trips", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      console.error("Create trip failed:", data);
+      alert(`Failed to create trip: ${data?.error || res.statusText}`);
+      setSubmitting(false);
       return;
     }
 
-    setSubmitting(true);
-
-    // Build a unique slug from title
-    const base = slugify(form.tripTitle);
-    const slug = `${base}-${Date.now().toString(36)}`;
-
-    // Map UI state -> API payload (what /api/trips expects)
-    const payload = {
-      slug, // REQUIRED by the API
-      title: form.tripTitle, // REQUIRED by the API
-      location: form.destinationCity,
-      duration: form.duration,
-      price: Number(form.price) || 0,
-      image: form.image,
-      mealsPerDay: Number(form.mealsPerDay) || 1,
-      startDates: form.startDates, // ISO yyyy-mm-dd[]
-      description: form.description,
-      inclusions: form.inclusions,
-      exclusions: form.exclusions,
-      itinerary, // [{day,title,details}]
-    };
-
-    try {
-      const res = await fetch("/api/trips", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        console.error("Create trip failed:", data);
-        alert(`Failed to create trip: ${data?.error || res.statusText}`);
-        setSubmitting(false);
-        return;
-      }
-
-      alert("✅ Trip created!");
-
-      // OPTIONAL: auto navigate to the newly created trip detail page
-      // window.location.href = `/trips/group-trips/${slug}`;
-      setSubmitting(false);
-    } catch (err: any) {
-      console.error(err);
-      alert("Failed to create trip. Network or server error.");
-      setSubmitting(false);
-    }
-  };
+    alert("✅ Trip created!");
+    // 🔁 redirect to the newly created trip page
+    window.location.href = `/trips/group-trips/${slug}`;
+  } catch (err) {
+    console.error(err);
+    alert("Failed to create trip. Network or server error.");
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div className="p-6">
