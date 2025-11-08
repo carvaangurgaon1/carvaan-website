@@ -1,88 +1,61 @@
-cat > lib/blobTrips.ts <<'TS'
 // lib/blobTrips.ts
 import { put, list } from "@vercel/blob";
-
-export type ItineraryDay = { day: number; title?: string; details?: string };
 
 export type Trip = {
   id: string;
   slug: string;
   title: string;
   location?: string;
-  duration?: string;      // "3N/4D"
-  price?: number;         // per person
-  image?: string;
-  mealsPerDay?: number;   // 1 | 2 | 3
-  startDates?: string[];  // ISO yyyy-mm-dd[]
+  duration?: string;
+  mealsPerDay?: number;
+  price?: number;
   description?: string;
   inclusions?: string;
   exclusions?: string;
-  itinerary?: ItineraryDay[];
-  createdAt: string;
-  updatedAt: string;
+  itinerary?: { day: number; title?: string; details?: string }[];
+  startDates?: string[];
+  image?: string;
 };
 
-function slugify(s: string) {
-  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+const BUCKET_PREFIX = "trips/";
+const INDEX_KEY = `${BUCKET_PREFIX}index.json`;
+
+async function readIndex(): Promise<Trip[]> {
+  const files = await list({ prefix: INDEX_KEY });
+  const index = files.blobs.find((b) => b.pathname === INDEX_KEY);
+  if (!index) return [];
+  const res = await fetch(index.url, { cache: "no-store" });
+  if (!res.ok) return [];
+  return (await res.json()) as Trip[];
 }
 
-const PREFIX = "trips/";
-
-export async function createTrip(input: Partial<Trip>): Promise<Trip> {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    throw new Error("Missing BLOB_READ_WRITE_TOKEN");
-  }
-
-  const now = new Date().toISOString();
-  const slugBase = input.title ? slugify(input.title) : "trip";
-  const slug = input.slug ? slugify(input.slug) : `${slugBase}-${Date.now()}`;
-  const id = input.id ?? `${Date.now()}`;
-
-  const trip: Trip = {
-    id,
-    slug,
-    title: input.title ?? "Untitled Trip",
-    location: input.location ?? "",
-    duration: input.duration ?? "",
-    price: input.price ?? 0,
-    image: input.image ?? "",
-    mealsPerDay: input.mealsPerDay ?? 1,
-    startDates: input.startDates ?? [],
-    description: input.description ?? "",
-    inclusions: input.inclusions ?? "",
-    exclusions: input.exclusions ?? "",
-    itinerary: input.itinerary ?? [],
-    createdAt: now,
-    updatedAt: now,
-  };
-
-  const pathname = `${PREFIX}${slug}.json`;
-  await put(pathname, JSON.stringify(trip), {
-    access: "public",
+async function writeIndex(trips: Trip[]) {
+  await put(INDEX_KEY, JSON.stringify(trips, null, 2), {
     contentType: "application/json",
-    addRandomSuffix: false,
+    access: "public",
   });
-
-  return trip;
 }
 
 export async function getTrips(): Promise<Trip[]> {
-  const res = await list({ prefix: PREFIX });
-  const trips: Trip[] = [];
-  for (const b of res.blobs) {
-    const r = await fetch(b.url, { cache: "no-store" });
-    const t = (await r.json()) as Trip;
-    trips.push(t);
-  }
-  trips.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
-  return trips;
+  return readIndex();
 }
 
 export async function getTripBySlug(slug: string): Promise<Trip | null> {
-  const res = await list({ prefix: PREFIX });
-  const blob = res.blobs.find((b) => b.pathname === `${PREFIX}${slug}.json`);
-  if (!blob) return null;
-  const r = await fetch(blob.url, { cache: "no-store" });
-  return (await r.json()) as Trip;
+  const trips = await readIndex();
+  return trips.find((t) => t.slug === slug) ?? null;
 }
-TS
+
+export async function createTrip(trip: Trip): Promise<Trip> {
+  const trips = await readIndex();
+  const exists = trips.find((t) => t.slug === trip.slug);
+  if (exists) {
+    // overwrite
+    const updated = trips.map((t) => (t.slug === trip.slug ? trip : t));
+    await writeIndex(updated);
+    return trip;
+  } else {
+    const next = [trip, ...trips];
+    await writeIndex(next);
+    return trip;
+  }
+}
