@@ -21,7 +21,7 @@ export type Trip = {
 const TOKEN = process.env.BLOB_READ_WRITE_TOKEN!;
 const FILE_KEY = "trips.json";
 
-/** Get all trips */
+/** Read all trips from Blob */
 export async function getTrips(): Promise<Trip[]> {
   const blobs = await list({ token: TOKEN });
   const file = blobs.blobs.find((b) => b.pathname === FILE_KEY);
@@ -32,7 +32,7 @@ export async function getTrips(): Promise<Trip[]> {
   return Array.isArray(data) ? data : data.trips ?? [];
 }
 
-/** Save all trips */
+/** Overwrite trips.json in Blob */
 export async function upsertTrips(trips: Trip[]): Promise<void> {
   await put(FILE_KEY, JSON.stringify(trips, null, 2), {
     access: "public",
@@ -41,10 +41,10 @@ export async function upsertTrips(trips: Trip[]): Promise<void> {
   });
 }
 
-/** Create a new trip */
+/** Create a single trip and persist */
 export async function createTrip(input: Partial<Trip>): Promise<Trip> {
   const now = new Date().toISOString();
-  const title = input.title?.trim() || "Untitled Trip";
+  const title = (input.title || "Untitled Trip").trim();
   const slugBase = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const slug = `${slugBase}-${Date.now().toString(36)}`;
 
@@ -60,19 +60,18 @@ export async function createTrip(input: Partial<Trip>): Promise<Trip> {
     inclusions: input.inclusions,
     exclusions: input.exclusions,
     mealsPerDay: input.mealsPerDay,
-    startDates: input.startDates,
-    itinerary: input.itinerary,
+    startDates: input.startDates ?? [],
+    itinerary: input.itinerary ?? [],
     createdAt: now,
   };
 
   const trips = await getTrips();
   trips.unshift(newTrip);
   await upsertTrips(trips);
-
   return newTrip;
 }
 
-/** Get trip by slug */
+/** Read one trip */
 export async function getTripBySlug(slug: string): Promise<Trip | undefined> {
   const trips = await getTrips();
   return trips.find((t) => t.slug === slug);
