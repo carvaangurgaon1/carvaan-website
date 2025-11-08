@@ -15,7 +15,10 @@ export default async function TripDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
+  const { slug } = await params; // 👈 this line is key
+
+  // ...rest of your component stays the same
+}
 
   const trip = await getTripBySlug(slug);
 
