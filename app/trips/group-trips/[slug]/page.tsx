@@ -6,15 +6,14 @@ import { getTripBySlug } from "@/lib/blobTrips";
 
 export const dynamic = "force-dynamic";
 
-type TripDetailProps = {
-  params: { slug: string };
-};
-
 export default async function TripDetailPage({
   params,
 }: {
   params: { slug: string };
 }) {
+  const { slug } = params;
+  const trip = await getTripBySlug(slug);
+  if (!trip) notFound();
 
   return (
     <main className="min-h-screen bg-gray-50">
