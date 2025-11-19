@@ -36,6 +36,7 @@ export default async function GroupTripsSection() {
             <div className="p-5 text-left">
               <h3 className="text-xl font-semibold text-gray-800 mb-1">{trip.title}</h3>
               <p className="text-gray-500">{trip.location}</p>
+              <p className="text-gray-500">{trip.companyname}</p>
               <p className="text-purple-700 font-bold mt-2">₹{trip.price.toLocaleString()}</p>
               <p className="text-sm text-gray-500">{trip.durationLabel}</p>
               <div className="mt-4 flex gap-3">
