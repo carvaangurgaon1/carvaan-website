@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
       slug,
       title: body.title,
       location: body.location ?? "",
+      companyname: body.companyname ?? "",
       duration: body.duration ?? "",
       mealsPerDay:
         typeof body.mealsPerDay === "number"
