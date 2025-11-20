@@ -8,6 +8,7 @@ type TripIndex = {
   slug: string;
   title: string;
   location: string;
+  companyname: string;
   category: string;
   price: number;
   durationLabel: string;
