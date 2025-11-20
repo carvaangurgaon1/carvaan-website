@@ -11,6 +11,7 @@ async function fetchTrips() {
     slug: string;
     title: string;
     location: string;
+    companyname: string;
     price: number;
     durationLabel: string;
     image: string;
